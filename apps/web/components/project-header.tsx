@@ -1,27 +1,11 @@
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { LogoMark } from '../landing/Logo';
 import { links } from '../landing/site';
 
 export function ProjectBrand() {
   return (
     <>
-      <svg
-        width="26"
-        height="26"
-        viewBox="0 0 32 32"
-        aria-hidden="true"
-        style={{ transform: 'rotate(-90deg)' }}
-      >
-        <path d="M16 3.5 28 10l-12 6.5L4 10z" fill="currentColor" />
-        <path
-          d="m4 15.5 12 6.5 12-6.5M4 21.5 16 28l12-6.5"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.4"
-          strokeLinejoin="round"
-          strokeLinecap="round"
-        />
-      </svg>
+      <LogoMark size={20} />
       <span>Reforma Digital</span>
     </>
   );
@@ -34,12 +18,11 @@ export function ProjectFooter() {
           <ProjectBrand />
         </Link>
         <nav aria-label="Información del proyecto">
-          <Link href="/#texto">La propuesta</Link>
+          <Link href="/extension">La extensión</Link>
+          <Link href="/propuesta">La propuesta</Link>
           <Link href="/sources">Fuentes oficiales</Link>
           <Link href="/privacy">Privacidad</Link>
-          <a href={links.repo}>
-            GitHub <ArrowUpRight size={13} />
-          </a>
+          <a href={links.repo}>GitHub ↗</a>
         </nav>
       </div>
       <div className="project-footer-bottom">

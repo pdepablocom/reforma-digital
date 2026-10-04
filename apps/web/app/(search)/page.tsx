@@ -4,14 +4,14 @@ import LandingHome from '../../components/landing-home';
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_ORIGIN || 'http://localhost:3000'),
-  title: 'Reforma Digital · La próxima reforma de la Administración',
+  title: 'Reforma Digital · Te ayudamos con el papeleo de la Administración',
   description:
-    'Una iniciativa abierta: un buscador de trámites con fuentes oficiales y una extensión para hacer más sencillas las webs de la Administración.',
+    'Pregunta por un trámite y te explicamos con palabras normales lo que dice la web oficial. Con la extensión gratuita para Chrome, esa web se ve más clara.',
   robots: { index: true, follow: true },
   openGraph: {
-    title: 'Reforma Digital · La próxima reforma de la Administración',
+    title: 'Reforma Digital · Te ayudamos con el papeleo de la Administración',
     description:
-      'Un buscador para entender los trámites, una extensión para las sedes oficiales, y una propuesta para tratar la interfaz como un bien común.',
+      'Pregunta por un trámite y te explicamos con palabras normales lo que dice la web oficial.',
     images: ['/og.png'],
     locale: 'es_ES',
     type: 'website',

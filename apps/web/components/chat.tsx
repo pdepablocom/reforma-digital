@@ -3,26 +3,9 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import {
-  ArrowUp,
-  ArrowDown,
-  ArrowLeft,
-  ArrowUpRight,
-  Check,
-  Copy,
-  ThumbsUp,
-  ThumbsDown,
-  Square,
-  X,
-  ChevronDown,
-  RotateCcw,
-  FileText,
-  CircleAlert,
-  Info,
-  PencilLine,
-} from 'lucide-react';
 import type { Evidence, SearchResult, Stage, VerifiedClaim } from '@reforma-digital/core';
 import { ProjectBrand } from './project-header';
+import { PixelIcon } from './pixel-icon';
 import { AttachmentPicker } from './attachment-picker';
 import type { PdfContext } from '../lib/attachment';
 import { protectMessages, ProtectionTimeoutError, warm } from '../lib/pii';
@@ -104,12 +87,12 @@ function SourceDialog({
               onClick={() => select()}
               aria-label="Todas las fuentes"
             >
-              <ArrowLeft size={18} />
+              <PixelIcon name="arrow-left" />
             </button>
           )}
           <h2 id="source-modal-title">{view?.selected ? 'Fragmento citado' : 'Fuentes'}</h2>
           <button className="chat-icon source-close" onClick={close} aria-label="Cerrar fuentes">
-            <X size={19} />
+            <PixelIcon name="close" />
           </button>
         </div>
         {view?.selected ? (
@@ -156,7 +139,7 @@ function SourceDialog({
               rel="noopener noreferrer"
               className="chat-official-link"
             >
-              Abrir documento oficial <ArrowUpRight size={15} />
+              Abrir documento oficial ↗
             </a>
           </div>
         ) : (
@@ -173,13 +156,13 @@ function SourceDialog({
                         {documents.length} {documents.length === 1 ? 'fuente' : 'fuentes'}
                       </small>
                     </span>
-                    <ChevronDown size={18} />
+                    <PixelIcon name="chevron-down" />
                   </summary>
                   <div className="source-documents">
                     {documents.map((doc) => (
                       <div key={doc.documentId}>
                         <a href={doc.canonicalUrl} target="_blank" rel="noopener noreferrer">
-                          {doc.title} <ArrowUpRight size={14} />
+                          {doc.title} ↗
                         </a>
                         {evidence
                           .filter((e) => e.documentId === doc.documentId)
@@ -283,7 +266,7 @@ function AnswerActions({
               aria-pressed={rating === 1}
               onClick={() => void vote(1)}
             >
-              <ThumbsUp size={16} />
+              <PixelIcon name="thumbs-up" />
             </button>
             <button
               className="chat-icon"
@@ -292,7 +275,7 @@ function AnswerActions({
               aria-pressed={rating === -1}
               onClick={() => setNegative(!negative)}
             >
-              <ThumbsDown size={16} />
+              <PixelIcon name="thumbs-down" />
             </button>
           </div>
         )}
@@ -301,7 +284,7 @@ function AnswerActions({
           onClick={() => void copy()}
           aria-label={copied ? 'Copiado' : 'Copiar respuesta'}
         >
-          {copied ? <Check size={16} /> : <Copy size={16} />}
+          <PixelIcon name={copied ? 'check' : 'copy'} />
         </button>
       </div>
       {negative && (
@@ -574,8 +557,31 @@ export default function Chat({
   }
   const showSources = (evidence: Evidence[], selected?: Evidence) =>
     setSourceView({ evidence, selected });
+  const links = (
+    <>
+      <Link
+        href="/"
+        onClick={(event) => {
+          event.preventDefault();
+          onNewConversation();
+        }}
+      >
+        Nueva conversación
+      </Link>
+      <Link href="/extension">La extensión</Link>
+      <Link href="/propuesta">La propuesta</Link>
+      <Link href="/sources">Fuentes oficiales</Link>
+      <Link href="/privacy">Privacidad</Link>
+      <small>
+        Proyecto independiente.
+        <br />
+        No es una sede oficial.
+      </small>
+    </>
+  );
   return (
     <div className="chat-page">
+      <div className="doc-guides" aria-hidden="true" />
       <header className="chat-header">
         <Link
           href="/"
@@ -588,28 +594,12 @@ export default function Chat({
         >
           <ProjectBrand />
         </Link>
+        <nav className="chat-side" aria-label="Navegación del chat">
+          {links}
+        </nav>
         <details ref={menu} className="chat-menu">
           <summary>Menú</summary>
-          <nav aria-label="Navegación del chat">
-            <Link
-              href="/"
-              onClick={(event) => {
-                event.preventDefault();
-                onNewConversation();
-              }}
-            >
-              Nueva conversación
-            </Link>
-            <Link href="/#texto">La iniciativa</Link>
-            <Link href="/sources">Fuentes oficiales</Link>
-            <Link href="/how-it-works">Cómo funciona</Link>
-            <Link href="/privacy">Privacidad</Link>
-            <small>
-              Proyecto independiente.
-              <br />
-              No es una sede oficial.
-            </small>
-          </nav>
+          <nav aria-label="Navegación del chat">{links}</nav>
         </details>
       </header>
       <a className="skip-link" href="#chat-input">
@@ -618,13 +608,13 @@ export default function Chat({
       <main id="main" className="chat-conversation" aria-label="Conversación">
         {!turns.length && (
           <div className="chat-empty">
-            <h1>¿Qué necesitas hacer?</h1>
+            <h1>¿En qué te puedo ayudar hoy?</h1>
             <p>Pregunta con tus palabras. Te acercamos a las fuentes oficiales.</p>
             <div className="chat-followups">
               {['¿Cómo me hago autónomo?', '¿Cómo me empadrono en Madrid?'].map((q) => (
                 <button key={q} onClick={() => void send(q)}>
                   {q}
-                  <ArrowUpRight size={17} />
+                  <PixelIcon name="arrow-right" />
                 </button>
               ))}
             </div>
@@ -636,7 +626,7 @@ export default function Chat({
               <p>
                 {turn.attachment && (
                   <span className="chat-attached-message">
-                    <FileText size={16} /> {turn.attachment.name}
+                    <PixelIcon name="file-text" /> {turn.attachment.name}
                   </span>
                 )}
                 <ProtectedQuestion text={turn.query} ranges={turn.hiddenData ?? []} id={turn.id} />
@@ -705,7 +695,6 @@ export default function Chat({
                               title={`Ver evidencia: ${e.title}`}
                             >
                               {e.organization}
-                              <ArrowUpRight size={13} />
                             </button>
                           </span>
                         ))}
@@ -730,7 +719,7 @@ export default function Chat({
                   <p>{turn.result.answer.answer}</p>
                 ) : (
                   <div className="chat-notice" role="status">
-                    <Info size={20} aria-hidden="true" />
+                    <PixelIcon name="circle-info" />
                     <div>
                       <h2>
                         {turn.result.answer.status === 'needs_clarification'
@@ -741,7 +730,7 @@ export default function Chat({
                       <div className="chat-notice-actions">
                         {turnIndex === turns.length - 1 && (
                           <button className="chat-link-button" onClick={() => rephrase(turn.query)}>
-                            <PencilLine size={15} aria-hidden="true" />
+                            <PixelIcon name="message-text" />
                             Reformular la pregunta
                           </button>
                         )}
@@ -775,14 +764,14 @@ export default function Chat({
                       disabled={loading}
                       onClick={() => void send(turn.query, turn.id)}
                     >
-                      <RotateCcw size={14} /> Volver a intentar
+                      <PixelIcon name="reload" /> Volver a intentar
                     </button>
                   )}
                 </div>
               )}
               {turn.state === 'error' && (
                 <div className="chat-notice chat-error" role="alert">
-                  <CircleAlert size={20} aria-hidden="true" />
+                  <PixelIcon name="info-box" />
                   <div>
                     <h2>No se ha podido completar la respuesta</h2>
                     <p>{turn.error}</p>
@@ -793,7 +782,7 @@ export default function Chat({
                     )}
                     {turnIndex === turns.length - 1 && (
                       <button disabled={loading} onClick={() => void send(turn.query, turn.id)}>
-                        <RotateCcw size={15} /> Volver a intentar
+                        <PixelIcon name="reload" /> Volver a intentar
                       </button>
                     )}
                   </div>
@@ -807,7 +796,7 @@ export default function Chat({
                     {['¿Qué documentación necesito?', '¿Dónde lo puedo tramitar?'].map((q) => (
                       <button key={q} onClick={() => void send(q)}>
                         {q}
-                        <ArrowUpRight size={17} />
+                        <PixelIcon name="arrow-right" />
                       </button>
                     ))}
                   </div>
@@ -820,7 +809,7 @@ export default function Chat({
       <div ref={dock} className="chat-composer-dock">
         {showJump && (
           <button className="chat-jump" onClick={jump} aria-label="Ir al último mensaje">
-            <ArrowDown size={18} />
+            <PixelIcon name="arrow-down" />
           </button>
         )}
         {attachmentError && (
@@ -831,7 +820,7 @@ export default function Chat({
         {(attachment || attachmentBusy) && (
           <div className="chat-attachment-preview">
             <div>
-              <FileText size={20} />
+              <PixelIcon name="file-text" />
               <span>{attachmentBusy ? 'Leyendo PDF…' : attachment?.name}</span>
               {attachment && !attachmentBusy && (
                 <button
@@ -839,7 +828,7 @@ export default function Chat({
                   onClick={() => setAttachment(undefined)}
                   aria-label="Quitar PDF"
                 >
-                  <X size={16} />
+                  <PixelIcon name="close" />
                 </button>
               )}
             </div>
@@ -901,15 +890,13 @@ export default function Chat({
                 onClick={() => active.current?.abort()}
                 aria-label="Detener respuesta"
               >
-                <Square size={13} fill="currentColor" />
+                Detener
+                <PixelIcon name="stop" />
               </button>
             ) : (
-              <button
-                className="chat-send"
-                disabled={input.trim().length < 4 || attachmentBusy}
-                aria-label="Enviar pregunta"
-              >
-                <ArrowUp size={20} />
+              <button className="chat-send" disabled={input.trim().length < 4 || attachmentBusy}>
+                Preguntar
+                <PixelIcon name="arrow-right" />
               </button>
             )}
           </div>

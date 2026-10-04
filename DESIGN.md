@@ -2,7 +2,7 @@
 
 Versión 1.0 · 2026‑09‑27
 
-Este documento es la referencia visual de **todo** lo que Reforma Digital pinta: los paneles, el popup, la capa de estilo que viste la web oficial y la web pública (`apps/web`: landing, chat y páginas informativas). Ningún portal (`sites/<id>`) ni la landing definen colores, tamaños ni componentes propios: usan los de aquí. Las demostraciones de la landing se pintan con las mismas clases que la extensión, así que lo que enseña la portada es lo que se instala.
+Este documento es la referencia visual de **todo** lo que Reforma Digital pinta: los paneles, el popup, la capa de estilo que viste la web oficial y la web pública (`apps/web`: landing, chat y páginas informativas). Ningún portal (`sites/<id>`) define colores, tamaños ni componentes propios: usan los de aquí. La web pública añade un sistema editorial propio, descrito en §8. Las demostraciones de la landing se pintan con las mismas clases que la extensión, así que lo que enseña la portada es lo que se instala.
 
 | Qué                                    | Dónde vive en el código                                                                                                                                                                                                                                                       |
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -177,22 +177,49 @@ Si un panel ofrece un control sincronizado con uno oficial (el desplegable de pr
 3. Revisa el resultado con `npm run site:preview -- <portal>`, que reproduce una visita grabada con `site:record` sin conexión y guarda capturas a 1280 y 390 px en `.cache/preview/<portal>/`. Para los campos conectados, usa el laboratorio (`npm run dev`).
 4. Un PR que cambie el diseño debe incluir capturas y, si toca tokens de color, el contraste medido.
 
-## 8. Landing
+## 8. Web pública
 
-La web pública (`apps/web`: landing, chat y páginas informativas) usa los mismos tokens y el mismo preset que la extensión; no tiene una guía aparte.
+La web pública (`apps/web`) parte de los tokens de `packages/design`, pero tiene su propio lenguaje editorial. Está pensada para gente que no sabe nada de tecnología: primero se pregunta, después se enseña y al final se explica. La extensión no cambia: sigue con §1–§7.
 
-- **Componentes.** Las demostraciones (portada y Fig. 5) se montan con las clases del preset (`bg-card`, `bg-step`, `bg-field-search`, `bg-choice`, `bg-btn`). La hoja de la landing solo añade lo que la extensión no tiene: el marco de navegador (contenedor gris de 28 px de radio con 10 px de relleno y panel interior de 18 px) y la maquetación del artículo.
-- **Tipografía.** Es la única diferencia: la landing carga Inter Variable en local (títulos con el diseño óptico Display, `opsz: 32`; cuerpo con `opsz: 14`) redefiniendo `--bg-font`. La extensión sigue con las fuentes del sistema para no empaquetar ni pedir fuentes dentro de una web oficial (§1.6).
-- **Iconos.** `lucide-react`, trazo 1.65–1.7. La marca se gira −90° con el texto horizontal.
-- **Figuras.** Blanco y negro, sin marcos decorativos. Las capturas de webs oficiales no se recolorean y van dentro del marco de navegador; las notas sobre una captura son píldoras negras con número, y en móvil pasan a lista bajo la imagen. Rojo (`danger-fg`) y verde (`success-fg`) solo rotulan «sin» y «con» Reforma Digital.
-- **Movimiento.** La portada admite una animación de entrada en sus dos previsualizaciones; se desactiva con `prefers-reduced-motion`. El resto sigue §2.4.
+| Página                 | Para qué                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `/`                    | Preguntar. Debajo: qué es, la demo, los trámites y cómo conseguir la extensión |
+| `/propuesta`           | La explicación a fondo (formato Documento)                                     |
+| `/extension`           | El producto: qué hace, demo, cómo instalarla, dónde funciona y qué no hace     |
+| `/privacy`, `/sources` | Información legal y fuentes                                                    |
+
+- **Color.** Fondo `--doc-bg` (#F7F6F5), bandas `--doc-band` (#EFEEEC), superficies blancas con un anillo de 1 px en lugar de borde o sombra. El rojo `--doc-red` (#DF1717) solo marca la sección activa del menú, el borde de las citas destacadas y el sello al pasar el ratón. Las acciones siguen en negro (`brand-600`).
+- **Forma.** Todas las esquinas son rectas, también en botones, campos, avisos, diálogos y el interruptor de la demo.
+- **Tipografía.** FFF Tool Serif Text (`--doc-serif`) para titulares, texto, menús y botones; Georgia de respaldo. Grotesca (`--bg-font`: FFF Tool Sans, con Inter de respaldo) solo para textos de 14 px o menos y para la demo, que imita la extensión. Mono (`--doc-mono`: Ufficio Mono) para números de sección, pies de figura y el pie. Las fuentes FFF y Ufficio solo se usan si están instaladas: no se publican archivos hasta comprar las licencias. Tamaños: pregunta de portada hasta 56 px, h1 de páginas 44 px, h2 28 px, texto 19 px (17 en móvil), todo en peso 400.
+- **Iconos.** Pixelarticons (MIT), copiados solo los usados en `apps/web/components/pixel-icon.tsx`, pintados a 24 px (48 en los sellos). Los enlaces de texto usan «↗». `DemoTransform` y `Annotated` conservan `lucide-react` porque recrean la extensión.
+- **Marca.** La R de 3 × 4 casillas con la esquina doblada (`LogoMark` en `apps/web/landing/Logo.tsx`). Mismo dibujo en el favicon.
+- **Botones.** Rectangulares, 40–44 px de alto, con texto siempre visible: relleno negro para la acción principal y contorno negro para la secundaria.
+- **Texto.** Tú, frases cortas y titulares en forma de pregunta o respuesta. Sin jerga en la portada ni en `/extension`: no se dice «IA», «interfaz», «adaptador», «repositorio» ni «pre-alpha»; se dice «la web oficial» y «un complemento gratuito para Google Chrome». Se enseña antes de explicar.
+
+### 8.1 Portada
+
+- **Primera pantalla.** Calma, sin menú lateral ni retícula: barra superior mínima (marca · La extensión · La propuesta), la R pequeña, la pregunta «¿En qué te puedo ayudar hoy?» como `h1`, el campo (nativo, 16 px o más, botón «Preguntar» activo desde 4 caracteres), tres sugerencias y una línea de microtexto. Al preguntar se abre la conversación en la misma página, sin cambiar la URL; el botón Atrás vuelve a la portada y recargar no reenvía la pregunta.
+- **Al bajar.** «Qué es» (dos frases y tres pasos), «Mira la diferencia» (`DemoTransform` con el interruptor Original/Mejorada), los trámites como sellos, cómo conseguir la extensión y un avance de la propuesta. Ids: `#preguntar`, `#que-es`, `#demo`, `#tramites`, `#extension`.
+- **Barra fija.** Solo en la portada: aparece cuando la pregunta sale de la vista y abre la misma conversación.
+- **Sellos.** Marco gris perforado, número en serif, pictograma de 48 px y nombre en vertical. Al pulsarlo se abre el chat con la pregunta escrita. El matasellos marca los trámites con web oficial adaptada en `sites/`. El nombre accesible del botón es la pregunta.
+- **Movimiento.** Solo la aparición de la barra fija y el gesto de los sellos al pasar el ratón. Ninguna animación al hacer scroll. Todo se desactiva con `prefers-reduced-motion`.
+
+### 8.2 Páginas Documento (`/propuesta`, `/extension`)
+
+- **Retícula.** Cinco columnas fijas, centradas en `--doc-width` (1288 px): margen 64 · navegación 262 · número 88 · lectura 700 · medianil 174 (`--doc-cols`). Líneas verticales (`.doc-guides`) a 1 px con `--doc-line`; desaparecen por debajo de 1100 px.
+- **Menú lateral** (`DocNav`): las páginas del sitio arriba, con la actual marcada, y debajo las secciones de esa página. Una barra roja de 2 px marca la sección visible. Cada página define sus secciones en `apps/web/landing/site.ts`.
+- **Secciones.** `section.doc-sec` con su número en el margen (`.doc-n`, mono 11 px). La numeración empieza en 01 en cada página. Figuras con pie en mono «Fig. n.»; las capturas de webs oficiales no se recolorean y van dentro del marco de navegador.
+- **Sedes adaptadas.** Tabla con datos copiados de `sites/<id>/site.config.json`. No se muestran métricas que no estén medidas.
+
+### 8.3 Guía de instalación
+
+- Mientras la extensión no esté en la Chrome Web Store, nunca se dice «en un clic». La guía de `/extension#instalar` da los pasos reales (descargar, `chrome://extensions`, «Modo de desarrollador», «Cargar descomprimida») con las etiquetas de Chrome en negrita, el tiempo aproximado y la versión mínima de Chrome.
+- Las sedes que se anuncian junto a la descarga coinciden con las que incluye la versión descargable.
+
+### 8.4 Conversación
+
+- En escritorio, la cabecera del chat pasa a la columna de navegación: marca, «Nueva conversación» (botón de contorno) y enlaces. Por debajo de 1100 px vuelve a ser una barra superior con «Menú».
+- La conversación ocupa la columna de lectura. La pregunta propia va en una superficie blanca a la derecha y la respuesta en serif, con las citas como enlaces y el fragmento en una superficie neutra. Los errores usan los tokens `danger`.
+- El compositor queda fijo abajo, alineado con la columna, con «Adjuntar PDF» y «Preguntar» visibles.
+- La respuesta aparece según llega, sin animaciones de entrada. «Pensando» conserva un brillo neutro mientras hay trabajo pendiente y queda estático con `prefers-reduced-motion`.
 - Las demostraciones no solicitan citas ni envían datos.
-
-### 8.1 Buscador y conversación
-
-- La landing, el chat, las citas y las páginas informativas comparten `apps/web/styles/theme.css`: Inter local y los tokens originales de `packages/design`. La propuesta se explica en la misma landing; `/propuesta` baja a `#texto`. El chat conserva los tokens originales; la portada añade acentos editoriales propios.
-- Títulos con Inter Display (`opsz: 32`), peso 500 y espaciado compacto; cuerpo con Inter Text (`opsz: 14`), 16 px como mínimo. Metadatos a 14 px y rótulos a 12 px. El titular de la iniciativa puede crecer hasta 72 px (40 px en móvil); la descripción principal mide de 18 a 24 px y se separa de la fotografía por 40 px. Las secciones mantienen la escala editorial de la propuesta.
-- Lienzo `canvas`, superficies blancas, radios de 16/24 px y acciones negras. En portada, el composer va sobre la fotografía del hero, sin borde y con anillo de foco; no lleva píldoras ni texto auxiliar de fuentes. Las citas son enlaces subrayados en `brand-600`; el fragmento se presenta en una superficie neutra. Los errores usan los tokens `danger`.
-- El hero usa exclusivamente los tokens neutros: `surface-muted` en el fondo, `ink` en el titular y `brand-600` en las acciones. La fotografía de Madrid conserva su tratamiento en blanco y negro; la descripción de las herramientas aparece dentro de la imagen, en `ink-inverse`, sobre un degradado oscuro para mantener el contraste. La foto crece si el composer o la descripción necesitan más espacio. Las sedes de la demo mantienen sus colores oficiales.
-- La portada es el ensayo de `apps/web/landing`. El hero centra el mensaje sobre la fotografía de Madrid, con el composer en su borde superior y el enlace de descarga debajo. Su marco mide hasta 1472 px, tiene 32 px de radio y márgenes de 32 px; la fotografía mide hasta 1016 px. En móvil, los márgenes son de 20 px, el fondo neutro empieza bajo la navegación y la foto tiene 24 px de radio. El composer conserva el campo nativo, crece con el texto hasta 140 px y muestra foco visible. Hasta 1023 px, el menú conserva el icono de hamburguesa con un objetivo táctil de 44 × 44 px. La demo de la extensión es `DemoTransform`: Original y Mejorada a la vez en la figura del artículo, y una sola vista en `/demo`. No alterna sola. No se usa un saludo de chatbot. Las demostraciones de sedes conservan sus colores oficiales y los componentes compartidos.
-- La respuesta aparece según llega, sin animaciones de entrada. Como indicador de actividad, el texto «Pensando» conserva un brillo neutro mientras hay trabajo pendiente; queda estático con `prefers-reduced-motion`. No se anima el resto del contenido al entrar.

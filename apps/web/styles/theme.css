@@ -1,13 +1,48 @@
 @import '@fontsource-variable/inter/standard.css';
 @import '@reforma-digital/design/tokens.css';
 
-/* Web typography from DESIGN.md §8. Colors and shapes stay in packages/design. */
+/* Web typography and «Documento» system from DESIGN.md §8. Shared colors stay in packages/design.
+   FFF Tool and Ufficio are used only when installed locally; nothing is shipped until licensed. */
 :root[data-bg-landing] {
-  --bg-font: 'Inter Variable', Inter, 'Helvetica Neue', Arial, sans-serif;
+  --bg-font:
+    'FFF Tool Sans TRIAL', 'FFF Tool Sans', 'Inter Variable', Inter, 'Helvetica Neue', Arial,
+    sans-serif;
+  --doc-serif: 'FFF Tool Serif Text', 'FFF Tool Serif TRIAL', 'Iowan Old Style', Georgia, serif;
+  --doc-mono: 'Ufficio Mono', ui-monospace, Menlo, monospace;
+  --doc-bg: #f7f6f5;
+  --doc-band: #efeeec;
+  --doc-line: rgb(20 20 20 / 0.12);
+  --doc-red: #df1717;
+  /* Grid: margin · nav · number · column · gutter (cognition.com-like). */
+  --doc-cols: 64px 262px 88px 700px 174px;
+  --doc-width: 1288px;
   color-scheme: light;
 }
+.doc-guides {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  --x: calc(50% - var(--doc-width) / 2);
+  background:
+    linear-gradient(var(--doc-line), var(--doc-line)) var(--x) 0 / 1px 100% no-repeat,
+    linear-gradient(var(--doc-line), var(--doc-line)) calc(var(--x) + 64px) 0 / 1px 100% no-repeat,
+    linear-gradient(var(--doc-line), var(--doc-line)) calc(var(--x) + 326px) 0 / 1px 100% no-repeat,
+    linear-gradient(var(--doc-line), var(--doc-line)) calc(var(--x) + 414px) 0 / 1px 100% no-repeat,
+    linear-gradient(var(--doc-line), var(--doc-line)) calc(var(--x) + 1114px) 0 / 1px 100% no-repeat,
+    linear-gradient(var(--doc-line), var(--doc-line)) calc(var(--x) + 1288px) 0 / 1px 100% no-repeat;
+}
+@media (max-width: 1100px) {
+  .doc-guides {
+    display: none;
+  }
+}
+.pixel-icon {
+  flex-shrink: 0;
+  shape-rendering: crispEdges;
+}
 :root[data-bg-landing] body {
-  font-family: var(--bg-font);
+  font-family: var(--doc-serif);
   font-optical-sizing: none;
   font-variation-settings: 'opsz' 14;
 }

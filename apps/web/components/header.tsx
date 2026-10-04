@@ -21,7 +21,8 @@ export function Header() {
             <div>
               <Link href="/">Hacer una pregunta</Link>
               <Link href="/sources">Fuentes oficiales</Link>
-              <Link href="/how-it-works">Cómo funciona</Link>
+              <Link href="/extension">La extensión</Link>
+              <Link href="/propuesta#como-funciona">Cómo funciona</Link>
               <Link href="/privacy">Privacidad</Link>
               <Link href="/admin/evals">Evaluaciones ↗</Link>
             </div>

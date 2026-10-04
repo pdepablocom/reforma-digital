@@ -1,6 +1,6 @@
 'use client';
 import { useRef } from 'react';
-import { Paperclip } from 'lucide-react';
+import { PixelIcon } from './pixel-icon';
 import { readPdfContext, type PdfContext } from '../lib/attachment';
 export function AttachmentPicker({
   busy,
@@ -42,13 +42,13 @@ export function AttachmentPicker({
       />
       <button
         type="button"
-        className="chat-icon chat-attach"
+        className="chat-attach"
         disabled={disabled || busy}
         onClick={() => input.current?.click()}
-        aria-label="Adjuntar PDF"
-        title="Adjuntar PDF · Hasta 5 MB y 20 páginas"
+        title="Hasta 5 MB y 20 páginas"
       >
-        <Paperclip size={21} />
+        <PixelIcon name="attachment" />
+        Adjuntar PDF
       </button>
     </>
   );

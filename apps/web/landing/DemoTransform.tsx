@@ -152,6 +152,7 @@ export default function DemoTransform({
                               select(s.id);
                               setQuery('');
                               setCategory('');
+                              if (compact) setView('enhanced');
                               enhanced.current?.scrollIntoView({
                                 behavior: window.matchMedia('(prefers-reduced-motion: reduce)')
                                   .matches
