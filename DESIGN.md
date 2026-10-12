@@ -240,3 +240,16 @@ El paquete guarda los cimientos de Sol y `apps/web` solo los consume: `app/(sear
 ### 8.6 Cambios posteriores
 
 Antes de añadir otro valor o componente, consulta `GUIA.md` y reutiliza los tokens y piezas existentes. Documenta aquí las decisiones de sistema y en la guía los detalles de uso. Comprueba móvil, teclado, contraste y reducción de movimiento. Incluye capturas comparables antes/después cuando cambies una pantalla existente.
+
+### 8.7 El Congreso
+
+El Congreso (`/new-escanoabierto/web`, en vista previa) es una sección de Reforma Digital y usa Sol sin tokens propios. Sus estilos están en [`congreso.css`](apps/web/components/congreso/congreso.css). Aquí solo se recoge lo que decide por su cuenta.
+
+- La página es blanca de arriba abajo, también la portada. El rojo a caja completa (`--atardecer` como fondo de un hero) queda para la portada de Reforma Digital (`/`).
+- La portada conserva la silueta del hero de Sol (8 px de margen, radio 28, titular centrado de 36–72 px), en blanco y con un anillo de 1 px en `--linea`. La cabecera y la barra de la sección van encima, no dentro.
+- El sol pixelado es el atardecer de Sol tramado en celdas cuadradas. Usa `--rojo`, `--naranja` y `--amarillo`, de dentro afuera, con tramado ordenado de Bayer 4 × 4 entre tintas vecinas, y es transparente fuera. Las imágenes guardan una celda por píxel y se amplían con `image-rendering: pixelated`; la celda (`--celda`) mide siempre un número entero de píxeles, porque con decimales la trama se emborrona.
+- Hay dos dibujos. `sol-horizonte.png` (360 × 32 celdas) es un arco bajo y ancho, solo para la portada: celda de 8 px, y de 6 px hasta 560 px de ancho. `sol-disco.png` (120 × 44 celdas) es un sol que asoma, para la cabecera de cada vista: celda de 4 px, y de 3 px hasta 1160 px.
+- El sol va pegado al borde inferior de su pieza y recortado por su radio: centrado en la portada y a la derecha en las cabeceras. Nunca lleva texto encima. En la portada, el relleno inferior reserva su alto; en las cabeceras, el texto no pasa del 52 % del ancho y, hasta 900 px, ocupa todo el ancho con el sol debajo, centrado, en un hueco reservado. Encima solo van piezas opacas, como el botón claro con `--sombra-flota`. Hay uno por pantalla, no se anima y no se usa como textura de tarjetas.
+- La cabecera de cada vista (`Intro` con `h1`) es una pieza blanca de radio 28 con el mismo anillo. La de la portada, con `h2`, no lleva pieza ni sol: allí ya está el horizonte.
+- Para cambiarlo se editan los números de [`sol-pixel.mjs`](apps/web/scripts/sol-pixel.mjs) y se ejecuta `node apps/web/scripts/sol-pixel.mjs`. El PNG no se retoca a mano.
+- Los colores de un hemiciclo o de un resultado son datos (sí, no, abstención). Detrás no va el sol ni otro fondo de color.
