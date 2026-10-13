@@ -235,7 +235,8 @@ El paquete guarda los cimientos de Sol y `apps/web` solo los consume: `app/(sear
 ### 8.5 Tailwind y componentes React
 
 - `apps/web` usa Tailwind v4 sin preflight. `sol/tailwind.css` nombra los tokens de Sol en un `@theme inline reference`: `bg-rojo` compila a `background-color: var(--rojo)`, así que los valores siguen estando una sola vez en `sol/tokens.css` y el CSS existente sigue usando `var(--rojo)`. La paleta, las familias, los radios, las sombras y las curvas por defecto de Tailwind se vacían; el espaciado (4 px por paso) y los puntos de corte se mantienen. El preset de Tailwind v3 de la extensión no cambia.
-- `Button` (`variant`: `primary`, `secondary`, `ghost`, `icon`, `send`) y `Field` solo ponen la clase de Sol y pasan las props y la ref al elemento nativo. `Button` con `href` es un `<a>`; sin él, un `<button>`.
+- `Button` (`variant`: `primary`, `secondary`, `ghost`, `icon`, `send`) y `Field` solo ponen la clase de Sol y pasan las props y la ref al elemento nativo. `Button` con `href` es un `<a>`; sin él, un `<button>`. Con `asChild`, aplica el estilo al hijo (por ejemplo, `next/link`) mediante Radix Slot y conserva su navegación y eventos.
+- `Select` y `Checkbox` usan los controles accesibles de Radix y los tokens de Sol. El select permite valores vacíos («Todos») y envía el valor real con un campo oculto en los formularios GET. `Actions`, `Tabs`, `Surface` y `Disclosure` comparten la composición de acciones, navegación, tarjetas y desplegables; no se duplican sus estilos en cada sección.
 
 ### 8.6 Cambios posteriores
 

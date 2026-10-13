@@ -1,3 +1,5 @@
+import { Button, Surface, Tabs, Disclosure } from '@reforma-digital/design/sol';
+import { Icon } from '../sol/icon';
 import {
   projectionSchema,
   marketsSchema,
@@ -142,29 +144,31 @@ export async function Geography({
             El mapa enlaza a las mismas fichas que la lista. Los datos no describen la situación de
             cada persona.
           </p>
-          <Link className="boton-claro" href={href('geografia/municipios')}>
-            Consultar los municipios
-          </Link>
+          <Button asChild variant="secondary">
+            <Link href={href('geografia/municipios')}>Consultar los municipios</Link>
+          </Button>
           <Source url="https://www.ine.es/">Instituto Nacional de Estadística</Source>
         </div>
       </div>
       <Filters action={href('geografia')} query={query} />
       <div className="cg-grid">
         {provinces.map(([id, p]) => (
-          <article className="cg-card" key={id}>
-            <h2>
-              <Link href={href(`geografia/${id}`)}>{p.n}</Link>
-            </h2>
-            <Stats
-              items={[
-                [p.pob, 'Habitantes'],
-                [p.esc, 'Escaños'],
-                [`${number(p.renta)} €`, 'Renta por persona'],
-                [p.edad, 'Edad media'],
-                [p.dens, 'Habitantes / km²'],
-              ]}
-            />
-          </article>
+          <Surface asChild key={id}>
+            <article className="cg-card">
+              <h2>
+                <Link href={href(`geografia/${id}`)}>{p.n}</Link>
+              </h2>
+              <Stats
+                items={[
+                  [p.pob, 'Habitantes'],
+                  [p.esc, 'Escaños'],
+                  [`${number(p.renta)} €`, 'Renta por persona'],
+                  [p.edad, 'Edad media'],
+                  [p.dens, 'Habitantes / km²'],
+                ]}
+              />
+            </article>
+          </Surface>
         ))}
       </div>
       <p className="cg-muted">
@@ -179,17 +183,15 @@ export async function Geography({
 
 function ElectionNav({ selected }: { selected: string }) {
   return (
-    <nav className="cg-tabs" aria-label="Elecciones">
+    <Tabs label="Elecciones">
       {electionPages.map(([id, title]) => (
-        <Link
-          key={id}
-          href={href(`elecciones/${id}`)}
-          aria-current={selected === id ? 'page' : undefined}
-        >
-          {title}
-        </Link>
+        <Button asChild variant="ghost" key={id}>
+          <Link href={href(`elecciones/${id}`)} aria-current={selected === id ? 'page' : undefined}>
+            {title}
+          </Link>
+        </Button>
       ))}
-    </nav>
+    </Tabs>
   );
 }
 
@@ -251,14 +253,16 @@ export async function Elections({
           <Section title="Provincia a provincia">
             <div className="cg-grid">
               {Object.entries(data.provincias).map(([id, seats]) => (
-                <article className="cg-card" key={id}>
-                  <h3>{geography.provincias[id]?.n || id}</h3>
-                  <p>
-                    {Object.entries(seats)
-                      .map(([p, n]) => `${p}: ${n}`)
-                      .join(' · ')}
-                  </p>
-                </article>
+                <Surface asChild key={id}>
+                  <article className="cg-card">
+                    <h3>{geography.provincias[id]?.n || id}</h3>
+                    <p>
+                      {Object.entries(seats)
+                        .map(([p, n]) => `${p}: ${n}`)
+                        .join(' · ')}
+                    </p>
+                  </article>
+                </Surface>
               ))}
             </div>
           </Section>
@@ -275,13 +279,15 @@ export async function Elections({
           {nav}
           <div className="cg-grid">
             {data.mercados.map((market) => (
-              <article className="cg-card" key={market.slug}>
-                <h2>{market.pregunta}</h2>
-                <Stats
-                  items={market.opciones.map((o) => [`${(o.p * 100).toFixed(1)} %`, o.nombre])}
-                />
-                <Source url={market.url}>Polymarket</Source>
-              </article>
+              <Surface asChild key={market.slug}>
+                <article className="cg-card">
+                  <h2>{market.pregunta}</h2>
+                  <Stats
+                    items={market.opciones.map((o) => [`${(o.p * 100).toFixed(1)} %`, o.nombre])}
+                  />
+                  <Source url={market.url}>Polymarket</Source>
+                </article>
+              </Surface>
             ))}
           </div>
         </>
@@ -295,30 +301,32 @@ export async function Elections({
           {nav}
           <div className="cg-grid">
             {data.elecciones.map((e) => (
-              <article className="cg-card" key={e.id}>
-                <h2>{e.nombre}</h2>
-                <p>Error absoluto medio: {e.media_mae} puntos</p>
-                <div className="cg-table">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Partido</th>
-                        <th>Media</th>
-                        <th>Resultado</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Object.entries(e.resultado).map(([p, n]) => (
-                        <tr key={p}>
-                          <th>{p}</th>
-                          <td>{e.media[p]} %</td>
-                          <td>{n} %</td>
+              <Surface asChild key={e.id}>
+                <article className="cg-card">
+                  <h2>{e.nombre}</h2>
+                  <p>Error absoluto medio: {e.media_mae} puntos</p>
+                  <div className="cg-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Partido</th>
+                          <th>Media</th>
+                          <th>Resultado</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </article>
+                      </thead>
+                      <tbody>
+                        {Object.entries(e.resultado).map(([p, n]) => (
+                          <tr key={p}>
+                            <th>{p}</th>
+                            <td>{e.media[p]} %</td>
+                            <td>{n} %</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </article>
+              </Surface>
             ))}
           </div>
         </>
@@ -340,29 +348,31 @@ export async function Elections({
         <Filters action={href('elecciones/encuestas')} query={query} />
         <div className="cg-grid">
           {filtered.slice((page - 1) * 24, page * 24).map((e, i) => (
-            <article className="cg-card" key={i}>
-              <h3>{e.empresa}</h3>
-              <p>
-                {date(e.ini)} → {date(e.fin)} · muestra {e.n ?? 'no publicada'}
-              </p>
-              <dl className="cg-poll">
-                {Object.entries(e.v).map(([p, n]) => (
-                  <div key={p}>
-                    <dt>{p}</dt>
-                    <dd>
-                      <span
-                        style={{
-                          width: `${n * 2}%`,
-                          background: polls.partidos.find((party) => party.id === p)?.color,
-                        }}
-                        aria-hidden="true"
-                      />
-                      {n} %
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </article>
+            <Surface asChild key={i}>
+              <article className="cg-card">
+                <h3>{e.empresa}</h3>
+                <p>
+                  {date(e.ini)} → {date(e.fin)} · muestra {e.n ?? 'no publicada'}
+                </p>
+                <dl className="cg-poll">
+                  {Object.entries(e.v).map(([p, n]) => (
+                    <div key={p}>
+                      <dt>{p}</dt>
+                      <dd>
+                        <span
+                          style={{
+                            width: `${n * 2}%`,
+                            background: polls.partidos.find((party) => party.id === p)?.color,
+                          }}
+                          aria-hidden="true"
+                        />
+                        {n} %
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </article>
+            </Surface>
           ))}
         </div>
         <Pagination page={page} total={filtered.length} params={{ q: query }} />
@@ -377,11 +387,13 @@ export async function Elections({
         {nav}
         <div className="cg-grid">
           {Object.entries(election.escanos).map(([id, n]) => (
-            <article className="cg-card" key={id}>
-              <h2>{geography.provincias[id]?.n || id}</h2>
-              <Stats items={[[n, 'Escaños']]} />
-              <Link href={href(`geografia/${id}`)}>Ver la provincia</Link>
-            </article>
+            <Surface asChild key={id}>
+              <article className="cg-card">
+                <h2>{geography.provincias[id]?.n || id}</h2>
+                <Stats items={[[n, 'Escaños']]} />
+                <Link href={href(`geografia/${id}`)}>Ver la provincia</Link>
+              </article>
+            </Surface>
           ))}
         </div>
       </>
@@ -434,19 +446,26 @@ export async function Elections({
           <Section title="Por provincia">
             <div className="cg-grid">
               {Object.entries(provinces.prov).map(([id, p]) => (
-                <details className="cg-card" key={id}>
-                  <summary>
-                    {geography.provincias[id]?.n || id} · {p.e} escaños
-                  </summary>
-                  <p>{number(p.sin_escano)} votos a candidaturas sin escaño</p>
-                  <ul>
-                    {p.c.map(([name, , votes, seats]) => (
-                      <li key={name}>
-                        {name}: {number(votes)} votos · {seats} escaños
-                      </li>
-                    ))}
-                  </ul>
-                </details>
+                <Surface asChild key={id}>
+                  <Disclosure
+                    className="cg-card"
+                    title={
+                      <>
+                        {geography.provincias[id]?.n || id} · {p.e} escaños
+                      </>
+                    }
+                    icon={<Icon name="abajo" size={16} />}
+                  >
+                    <p>{number(p.sin_escano)} votos a candidaturas sin escaño</p>
+                    <ul>
+                      {p.c.map(([name, , votes, seats]) => (
+                        <li key={name}>
+                          {name}: {number(votes)} votos · {seats} escaños
+                        </li>
+                      ))}
+                    </ul>
+                  </Disclosure>
+                </Surface>
               ))}
             </div>
           </Section>
@@ -462,15 +481,17 @@ export async function Elections({
             .slice()
             .reverse()
             .map((e) => (
-              <Link href={href(`elecciones/${e.id}`)} className="cg-card" key={e.id}>
-                <h2>{date(e.fecha)}</h2>
-                <Stats
-                  items={[
-                    [e.votantes, 'Votantes'],
-                    [`${((e.votantes / e.censo) * 100).toFixed(1)} %`, 'Participación'],
-                  ]}
-                />
-              </Link>
+              <Surface asChild key={e.id}>
+                <Link href={href(`elecciones/${e.id}`)} className="cg-card">
+                  <h2>{date(e.fecha)}</h2>
+                  <Stats
+                    items={[
+                      [e.votantes, 'Votantes'],
+                      [`${((e.votantes / e.censo) * 100).toFixed(1)} %`, 'Participación'],
+                    ]}
+                  />
+                </Link>
+              </Surface>
             ))}
         </div>
       </>
@@ -502,10 +523,12 @@ export async function Elections({
       <Section title="Explora las elecciones">
         <div className="cg-grid">
           {electionPages.slice(1).map(([id, title]) => (
-            <Link className="cg-card" key={id} href={href(`elecciones/${id}`)}>
-              <h2>{title}</h2>
-              <span>Consultar →</span>
-            </Link>
+            <Surface asChild key={id}>
+              <Link className="cg-card" href={href(`elecciones/${id}`)}>
+                <h2>{title}</h2>
+                <span>Consultar →</span>
+              </Link>
+            </Surface>
           ))}
         </div>
       </Section>

@@ -6,7 +6,6 @@ export const congressSections = [
       ['Inicio', ''],
       ['Elecciones', 'elecciones'],
       ['Geografía', 'geografia'],
-      ['¿Quién lo dijo?', 'quien-lo-dijo'],
       ['Método', 'metodo'],
     ],
   },

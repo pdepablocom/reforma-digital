@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import { Icon } from '../sol/icon';
+import { Button, Actions } from '@reforma-digital/design/sol';
 import { Intro, Section, Source } from './common';
 
 export function Information({ section, title }: { section: string; title: string }) {
@@ -77,17 +78,21 @@ export function Information({ section, title }: { section: string; title: string
               código del recolector se ha adaptado de Escaño Abierto, con licencia MIT y su
               atribución.
             </p>
-            <div className="cg-tabs">
-              <Link className="boton" href="/api/congreso">
-                Consultar la API
-              </Link>
-              <Link className="boton-claro" href="/api/congreso/descarga">
+            <Actions>
+              <Button href="/api/congreso">Consultar la API</Button>
+              <Button href="/api/congreso/descarga" variant="secondary">
                 Descargar el histórico
-              </Link>
-              <Source url="https://github.com/jorgegarcelan/escano-abierto">
-                Código de origen
-              </Source>
-            </div>
+              </Button>
+              <Button
+                variant="ghost"
+                href="https://github.com/jorgegarcelan/escano-abierto"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Código de origen <Icon name="externo" size={16} />
+                <span className="sr-only"> (se abre en otra pestaña)</span>
+              </Button>
+            </Actions>
           </Section>
         </>
       )}

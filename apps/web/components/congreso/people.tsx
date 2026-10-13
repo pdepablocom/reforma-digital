@@ -1,3 +1,5 @@
+import { Surface, Disclosure } from '@reforma-digital/design/sol';
+import { Icon } from '../sol/icon';
 import { extraSchema } from '../../lib/congreso/schema';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -89,11 +91,13 @@ export async function People({
         <Filters action={href('organigrama')} query={query} />
         <div className="cg-grid">
           {cargos.slice((page - 1) * 24, page * 24).map(([id, cargo]) => (
-            <Link className="cg-card" key={id} href={href(`cargo/${id}`)}>
-              <span className="t-etiqueta">{cargo.ministerio}</span>
-              <h3>{cargo.cargo}</h3>
-              <p>{cargo.mandatos.find((m) => !m.hasta)?.persona || 'Vacante'}</p>
-            </Link>
+            <Surface asChild key={id}>
+              <Link className="cg-card" href={href(`cargo/${id}`)}>
+                <span className="t-etiqueta">{cargo.ministerio}</span>
+                <h3>{cargo.cargo}</h3>
+                <p>{cargo.mandatos.find((m) => !m.hasta)?.persona || 'Vacante'}</p>
+              </Link>
+            </Surface>
           ))}
         </div>
         <Pagination page={page} total={cargos.length} params={{ q: query }} />
@@ -153,8 +157,12 @@ export async function People({
               <Section title="Declaración de intereses">
                 <p>Información del registro público del Congreso.</p>
                 {Object.entries(extra.intereses).map(([label, value]) => (
-                  <details className="cg-transcript" key={label}>
-                    <summary>{label.replaceAll('_', ' ')}</summary>
+                  <Disclosure
+                    className="cg-transcript"
+                    key={label}
+                    title={<>{label.replaceAll('_', ' ')}</>}
+                    icon={<Icon name="abajo" size={16} />}
+                  >
                     {typeof value === 'string' ? (
                       <p>{value}</p>
                     ) : (
@@ -166,7 +174,7 @@ export async function People({
                         ))}
                       </ul>
                     )}
-                  </details>
+                  </Disclosure>
                 ))}
               </Section>
             )}
@@ -201,38 +209,44 @@ export async function People({
           {Object.entries(index.grupos)
             .filter(([, g]) => g.escanos)
             .map(([id, g]) => (
-              <article className="cg-card" key={id}>
-                <span className="cg-group">
-                  <i style={{ background: g.color }} />
-                  {id}
-                </span>
-                <h2>{g.nombre}</h2>
-                <Stats
-                  items={[
-                    [g.escanos, 'Escaños'],
-                    [
-                      data.intervenciones.filter((iv) => iv.g === id).length,
-                      'Intervenciones analizadas',
-                    ],
-                  ]}
-                />
-                <Link href={`${href('diputados')}?grupo=${id}`}>Ver sus diputados</Link>
-                <details>
-                  <summary>Voto mayoritario del grupo</summary>
-                  <ul className="cg-list">
-                    {data.votaciones.slice(0, 12).map((v) => (
-                      <li key={v.id}>
-                        <Link href={href(`votacion/${v.id}`, v.fecha.slice(0, 7))}>{v.titulo}</Link>
-                        <b>
-                          {{ S: 'Sí', N: 'No', A: 'Abstención', X: 'No vota' }[
-                            v.grupos[id] || ''
-                          ] || 'Voto dividido'}
-                        </b>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              </article>
+              <Surface asChild key={id}>
+                <article className="cg-card">
+                  <span className="cg-group">
+                    <i style={{ background: g.color }} />
+                    {id}
+                  </span>
+                  <h2>{g.nombre}</h2>
+                  <Stats
+                    items={[
+                      [g.escanos, 'Escaños'],
+                      [
+                        data.intervenciones.filter((iv) => iv.g === id).length,
+                        'Intervenciones analizadas',
+                      ],
+                    ]}
+                  />
+                  <Link href={`${href('diputados')}?grupo=${id}`}>Ver sus diputados</Link>
+                  <Disclosure
+                    title="Voto mayoritario del grupo"
+                    icon={<Icon name="abajo" size={16} />}
+                  >
+                    <ul className="cg-list">
+                      {data.votaciones.slice(0, 12).map((v) => (
+                        <li key={v.id}>
+                          <Link href={href(`votacion/${v.id}`, v.fecha.slice(0, 7))}>
+                            {v.titulo}
+                          </Link>
+                          <b>
+                            {{ S: 'Sí', N: 'No', A: 'Abstención', X: 'No vota' }[
+                              v.grupos[id] || ''
+                            ] || 'Voto dividido'}
+                          </b>
+                        </li>
+                      ))}
+                    </ul>
+                  </Disclosure>
+                </article>
+              </Surface>
             ))}
         </div>
       </>

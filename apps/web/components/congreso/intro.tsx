@@ -30,10 +30,6 @@ const titles: Record<string, [string, string?]> = {
     'España, en datos',
     'Población, renta, edad y representación, con datos del INE y del Congreso.',
   ],
-  'quien-lo-dijo': [
-    '¿Quién lo dijo?',
-    'Una cita del Congreso. Adivina el grupo y después consulta el contexto.',
-  ],
 };
 
 async function Caption({ section }: { section: string }) {

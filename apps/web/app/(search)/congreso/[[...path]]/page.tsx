@@ -1,9 +1,11 @@
+import { Icon } from '../../../../components/sol/icon';
+import { Button, Surface, Select } from '@reforma-digital/design/sol';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { z } from 'zod';
-import { getIndex, getPeriod, getQuiz } from '../../../../lib/congreso/data';
+import { getIndex, getPeriod } from '../../../../lib/congreso/data';
 import { congressBase, congressRoute } from '../../../../lib/congreso/routes';
 import { pageMetadata } from '../../../../lib/seo';
 import {
@@ -22,7 +24,6 @@ import { Activity } from '../../../../components/congreso/activity';
 import { People } from '../../../../components/congreso/people';
 import { Explore } from '../../../../components/congreso/explore';
 import { Geography, Elections } from '../../../../components/congreso/elections';
-import { Quiz } from '../../../../components/congreso/quiz';
 import { Information } from '../../../../components/congreso/information';
 import { StaticIntro } from '../../../../components/congreso/intro';
 import { DataLoading } from '../../../../components/congreso/loading';
@@ -69,9 +70,9 @@ export default async function Page({ params, searchParams }: Props) {
             Cada pleno resumido, cada votación con el voto de cada diputado y cada ley, desde que
             entra hasta que se publica. Con datos oficiales, en lenguaje claro y con código abierto.
           </p>
-          <a className="boton-claro" href="#lo-ultimo">
+          <Button href="#lo-ultimo" variant="secondary">
             Lo último del Congreso ↓
-          </a>
+          </Button>
         </section>
       )}
       <div className="cg-body">
@@ -154,18 +155,7 @@ async function Data({
     content = <Geography detail={detail} query={q} page={pagina} />;
   else if (section === 'elecciones')
     content = <Elections detail={detail} query={q} page={pagina} />;
-  else if (section === 'quien-lo-dijo') {
-    const quizzes = await getQuiz();
-    const days = Object.keys(quizzes).sort();
-    const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Madrid' }).format(
-      new Date(),
-    );
-    const day = days.filter((d) => d <= today).at(-1);
-    const rounds = day && quizzes[day];
-    content = (
-      <>{rounds ? <Quiz rounds={rounds} /> : <Empty>No hay un reto publicado para hoy.</Empty>}</>
-    );
-  } else {
+  else {
     const data = await getPeriod(periodo);
     content = (
       <>
@@ -207,14 +197,16 @@ async function Data({
           {index.agenda.plenos.length ? (
             <div className="cg-grid">
               {index.agenda.plenos.map((pleno) => (
-                <article className="cg-card" key={pleno.fecha}>
-                  <h3>{date(pleno.fecha)}</h3>
-                  <ul>
-                    {pleno.puntos.map((p, i) => (
-                      <li key={i}>{p.titulo}</li>
-                    ))}
-                  </ul>
-                </article>
+                <Surface asChild key={pleno.fecha}>
+                  <article className="cg-card">
+                    <h3>{date(pleno.fecha)}</h3>
+                    <ul>
+                      {pleno.puntos.map((p, i) => (
+                        <li key={i}>{p.titulo}</li>
+                      ))}
+                    </ul>
+                  </article>
+                </Surface>
               ))}
             </div>
           ) : (
@@ -232,19 +224,25 @@ async function Data({
           action={`${congressBase}/${section}${detail ? `/${detail}` : ''}`}
         >
           <label htmlFor="congress-period">Periodo</label>
-          <select id="congress-period" className="campo" name="periodo" defaultValue={periodo}>
-            <option value="reciente">Últimos tres meses</option>
-            <option value="todo">Toda la legislatura</option>
-            {index.meses
-              .slice()
-              .reverse()
-              .map((m) => (
-                <option key={m.mes}>{m.mes}</option>
-              ))}
-          </select>
-          <button className="boton-claro" type="submit">
+          <Select
+            id="congress-period"
+            name="periodo"
+            label="Periodo"
+            defaultValue={periodo}
+            options={[
+              { value: 'reciente', label: 'Últimos tres meses' },
+              { value: 'todo', label: 'Toda la legislatura' },
+              ...index.meses
+                .slice()
+                .reverse()
+                .map((m) => ({ value: m.mes, label: m.mes })),
+            ]}
+            icon={<Icon name="abajo" size={16} />}
+            selectedIcon={<Icon name="hecho" size={16} />}
+          />
+          <Button type="submit" variant="secondary">
             Aplicar
-          </button>
+          </Button>
         </form>
       )}
       {content}

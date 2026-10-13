@@ -32,6 +32,8 @@ describe('datos del Congreso', () => {
   });
   it('rechaza rutas inventadas y fichas sin identificador', () => {
     expect(congressRoute(['nada'])).toBeNull();
+    expect(congressRoute(['quien-lo-dijo'])).toBeNull();
+    expect(sitemap().some(({ url }) => url.includes('quien-lo-dijo'))).toBe(false);
     expect(congressRoute(['diputado'])).toBeNull();
     expect(congressRoute(['sesion', 'demo', 'extra'])).toBeNull();
     expect(congressRoute(['votacion', 'demo'])?.section).toBe('votacion');

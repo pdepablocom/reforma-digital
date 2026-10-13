@@ -31,30 +31,21 @@
 .cg-nav details {
   position: relative;
 }
-.cg-nav summary {
-  cursor: pointer;
-  font-size: 14px;
-}
 .cg-nav ul {
   position: absolute;
   z-index: 10;
   top: 100%;
   right: 0;
   min-width: 220px;
-  padding: var(--e-12);
   margin-top: var(--e-12);
-  background: var(--blanco);
-  border: 1px solid var(--linea);
-  border-radius: var(--r-16);
-  box-shadow: var(--sombra-flota);
   list-style: none;
 }
-.cg-nav li a {
-  display: block;
-  padding: var(--e-8);
-  border-radius: var(--r-12);
+.cg-nav li a,
+.cg-lateral a {
+  width: 100%;
+  justify-content: flex-start;
 }
-.cg-nav li a:hover {
+.cg :is(.cg-nav, .cg-lateral) [aria-current='page'] {
   background: var(--superficie);
 }
 /* Desde 1100 px, las vistas van en una columna a la izquierda, todas a la vista y sin desplegables; el
@@ -104,22 +95,6 @@
     padding-inline: var(--e-12);
     font-size: 11px;
     color: var(--tinta-3);
-  }
-  .cg-lateral a {
-    display: flex;
-    align-items: center;
-    min-height: 36px;
-    padding-inline: var(--e-12);
-    border-radius: var(--r-12);
-    color: var(--tinta-2);
-    font-size: 14.5px;
-    font-weight: 500;
-  }
-  .cg .cg-lateral a:hover,
-  .cg-lateral [aria-current='page'] {
-    background: var(--superficie);
-    color: var(--tinta);
-    text-decoration: none;
   }
   .cg-marco .cg-hero {
     margin-inline: 0;
@@ -177,8 +152,7 @@
   margin: auto;
   padding: var(--e-32) var(--margen) var(--e-80);
 }
-.cg-period,
-.cg-tabs {
+.cg-period {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -188,14 +162,8 @@
 .cg-period .campo {
   width: auto;
 }
-.cg-tabs a {
-  padding: var(--e-8) var(--e-12);
-  background: var(--superficie);
-  border-radius: var(--r-pildora);
-}
-.cg-tabs [aria-current='page'] {
-  background: var(--tinta);
-  color: var(--blanco);
+.cg-body .sol-tabs {
+  margin-bottom: var(--e-24);
 }
 .cg-intro {
   margin: var(--e-32) 0;
@@ -312,10 +280,6 @@
   gap: var(--e-20);
 }
 .cg-card {
-  padding: var(--e-24);
-  border: 1px solid var(--linea);
-  border-radius: var(--r-20);
-  background: var(--blanco);
   overflow-wrap: anywhere;
 }
 .cg-card h2 {
@@ -339,7 +303,7 @@
 .cg-card .cg-stats dt {
   max-width: 14ch;
 }
-.cg-body a:not(.boton, .boton-claro, .cg-card):hover {
+.cg-body a:not(.boton, .boton-claro, .boton-fantasma, .boton-icono, .boton-enviar, .cg-card):hover {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -347,11 +311,6 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--e-20);
-}
-.cg-vote {
-  padding: var(--e-24);
-  border: 1px solid var(--linea);
-  border-radius: var(--r-20);
 }
 .cg-vote h3 {
   font-size: 21px;
@@ -445,11 +404,6 @@
   margin-top: var(--e-8);
   color: var(--tinta-2);
 }
-.cg-hemicycle {
-  padding: var(--e-32);
-  border-radius: var(--r-20);
-  background: var(--superficie);
-}
 .cg-hemicycle svg {
   width: 100%;
   max-height: 360px;
@@ -506,16 +460,10 @@
   gap: var(--e-16);
   margin: var(--e-32) 0;
 }
-.cg-empty {
-  padding: var(--e-32);
-  background: var(--superficie);
-  border-radius: var(--r-20);
-}
 .cg-source {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--azul);
   margin: var(--e-12) 0;
 }
 .cg-muted,
@@ -598,32 +546,8 @@
   font-size: 14px;
   color: var(--tinta-3);
 }
-.cg-quiz {
-  max-width: 780px;
-  margin: auto;
-  padding: var(--e-40);
-  background: var(--superficie);
-  border-radius: var(--r-28);
-}
-.cg-quiz blockquote {
-  font-size: clamp(28px, 3.2vw, 42px);
-}
-.cg-quiz-answers {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--e-12);
-  margin: var(--e-24) 0;
-}
 .cg-coalition {
-  background: var(--superficie);
-  border-radius: var(--r-20);
-  padding: var(--e-24);
   margin: var(--e-32) 0;
-}
-.cg-coalition label {
-  display: flex;
-  align-items: center;
-  gap: var(--e-8);
 }
 .cg-coalition .cg-grid label {
   display: grid;
@@ -716,10 +640,6 @@
   }
   .cg-section-title {
     flex-wrap: wrap;
-  }
-  .cg-hemicycle,
-  .cg-quiz {
-    padding: var(--e-20);
   }
   .cg-stats {
     gap: var(--e-24);

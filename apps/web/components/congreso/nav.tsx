@@ -1,4 +1,6 @@
 'use client';
+import { Disclosure, Button } from '@reforma-digital/design/sol';
+import { Icon } from '../sol/icon';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -28,9 +30,11 @@ export function CongressNav() {
       const current = path === view;
       return (
         <li key={path}>
-          <Link href={href} aria-current={current ? 'page' : undefined}>
-            {title}
-          </Link>
+          <Button asChild variant="ghost">
+            <Link href={href} aria-current={current ? 'page' : undefined}>
+              {title}
+            </Link>
+          </Button>
         </li>
       );
     });
@@ -42,10 +46,13 @@ export function CongressNav() {
           El Congreso
         </Link>
         {congressSections.map((section) => (
-          <details key={section.title}>
-            <summary>{section.title}</summary>
-            <ul>{links(section.pages)}</ul>
-          </details>
+          <Disclosure
+            key={section.title}
+            title={section.title}
+            icon={<Icon name="abajo" size={16} />}
+          >
+            <ul className="caja-flota">{links(section.pages)}</ul>
+          </Disclosure>
         ))}
       </nav>
       <nav className="cg-lateral" aria-label="Secciones del Congreso">
