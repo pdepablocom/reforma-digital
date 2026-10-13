@@ -339,7 +339,7 @@
 .cg-card .cg-stats dt {
   max-width: 14ch;
 }
-.cg a:not(.boton, .boton-claro, .cg-card):hover {
+.cg-body a:not(.boton, .boton-claro, .cg-card):hover {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
