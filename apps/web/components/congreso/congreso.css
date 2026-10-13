@@ -1,6 +1,18 @@
 .cg {
   color: var(--tinta);
 }
+.cg-loading-line {
+  height: var(--e-16);
+  margin-block: var(--e-16);
+  border-radius: var(--r-12);
+  background: var(--superficie);
+}
+.cg-loading-line:first-child {
+  width: 40%;
+}
+.cg-loading-line:last-child {
+  width: 75%;
+}
 .cg-nav {
   max-width: var(--ancho);
   margin: auto;

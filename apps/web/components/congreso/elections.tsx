@@ -112,9 +112,11 @@ export async function Geography({
       );
   return (
     <>
-      <Intro title={selected ? selected[1].n : 'España, en datos'}>
-        <p>Población, renta, edad y representación, con datos del INE y del Congreso.</p>
-      </Intro>
+      {selected && (
+        <Intro title={selected[1].n}>
+          <p>Población, renta, edad y representación, con datos del INE y del Congreso.</p>
+        </Intro>
+      )}
       <div className="cg-geo-hero">
         <svg
           viewBox={`0 0 ${map.ancho} ${map.alto}`}
@@ -175,20 +177,8 @@ export async function Geography({
   );
 }
 
-export async function Elections({
-  detail,
-  query,
-  page,
-}: {
-  detail?: string;
-  query: string;
-  page: number;
-}) {
-  const election = await getElections();
-  const selected = detail || 'calendario';
-  if (['caducan', 'legislatura', 'repite', 'metricas', 'mapa', 'voto', 'noche'].includes(selected))
-    return <ElectionContext detail={selected} query={query} page={page} />;
-  const nav = (
+function ElectionNav({ selected }: { selected: string }) {
+  return (
     <nav className="cg-tabs" aria-label="Elecciones">
       {electionPages.map(([id, title]) => (
         <Link
@@ -201,6 +191,33 @@ export async function Elections({
       ))}
     </nav>
   );
+}
+
+export async function Elections({
+  detail,
+  query,
+  page,
+}: {
+  detail?: string;
+  query: string;
+  page: number;
+}) {
+  if (detail === 'escano')
+    return (
+      <>
+        <Intro title="Cómo se reparte un escaño" />
+        <ElectionNav selected="escano" />
+        <Dhondt />
+        <Source url="https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672">
+          Ley Orgánica del Régimen Electoral General
+        </Source>
+      </>
+    );
+  const election = await getElections();
+  const selected = detail || 'calendario';
+  if (['caducan', 'legislatura', 'repite', 'metricas', 'mapa', 'voto', 'noche'].includes(selected))
+    return <ElectionContext detail={selected} query={query} page={page} />;
+  const nav = <ElectionNav selected={selected} />;
   if (['encuestas', 'proyeccion', 'mercados', 'acierto'].includes(selected)) {
     const polls = await getPolls();
     if (pollsHidden(polls.veda))
@@ -459,17 +476,6 @@ export async function Elections({
       </>
     );
   }
-  if (selected === 'escano')
-    return (
-      <>
-        <Intro title="Cómo se reparte un escaño" />
-        {nav}
-        <Dhondt />
-        <Source url="https://www.boe.es/buscar/act.php?id=BOE-A-1985-11672">
-          Ley Orgánica del Régimen Electoral General
-        </Source>
-      </>
-    );
   if (selected !== 'calendario') notFound();
   return (
     <>

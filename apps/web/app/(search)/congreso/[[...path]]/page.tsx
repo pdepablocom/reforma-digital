@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { z } from 'zod';
@@ -22,6 +23,9 @@ import { People } from '../../../../components/congreso/people';
 import { Explore } from '../../../../components/congreso/explore';
 import { Geography, Elections } from '../../../../components/congreso/elections';
 import { Quiz } from '../../../../components/congreso/quiz';
+import { Information } from '../../../../components/congreso/information';
+import { StaticIntro } from '../../../../components/congreso/intro';
+import { DataLoading } from '../../../../components/congreso/loading';
 
 type Props = {
   params: Promise<{ path?: string[] }>;
@@ -53,7 +57,53 @@ export default async function Page({ params, searchParams }: Props) {
   if (!route) notFound();
   const parsed = querySchema.safeParse(await searchParams);
   if (!parsed.success) notFound();
-  const { q, grupo, provincia, periodo, pagina, vista } = parsed.data;
+  const { section, detail } = route;
+  const information = ['sobre', 'metodo', 'glosario', 'como-ley'].includes(section);
+  return (
+    <main id="main" tabIndex={-1}>
+      {section === '' && (
+        <section className="cg-hero">
+          <span className="t-etiqueta">Un proyecto de Reforma Digital</span>
+          <h1>Lo que pasa en el Congreso, contado para cualquiera.</h1>
+          <p>
+            Cada pleno resumido, cada votación con el voto de cada diputado y cada ley, desde que
+            entra hasta que se publica. Con datos oficiales, en lenguaje claro y con código abierto.
+          </p>
+          <a className="boton-claro" href="#lo-ultimo">
+            Lo último del Congreso ↓
+          </a>
+        </section>
+      )}
+      <div className="cg-body">
+        {information ? (
+          <Information section={section} title={route.title} />
+        ) : section === 'elecciones' && detail === 'escano' ? (
+          <Elections detail={detail} query={parsed.data.q} page={parsed.data.pagina} />
+        ) : (
+          <>
+            <StaticIntro section={section} detail={detail} province={parsed.data.provincia} />
+            <Suspense
+              key={`${section}/${detail ?? ''}/${JSON.stringify(parsed.data)}`}
+              fallback={<DataLoading />}
+            >
+              <Data route={route} query={parsed.data} />
+            </Suspense>
+          </>
+        )}
+      </div>
+    </main>
+  );
+}
+
+async function Data({
+  route,
+  query,
+}: {
+  route: NonNullable<ReturnType<typeof congressRoute>>;
+  query: z.infer<typeof querySchema>;
+}) {
+  const { q, grupo, provincia, periodo, pagina, vista } = query;
+
   const index = await getIndex();
   if (!['reciente', 'todo', ...index.meses.map((m) => m.mes)].includes(periodo)) notFound();
   const { section, detail } = route;
@@ -113,104 +163,7 @@ export default async function Page({ params, searchParams }: Props) {
     const day = days.filter((d) => d <= today).at(-1);
     const rounds = day && quizzes[day];
     content = (
-      <>
-        <Intro title="¿Quién lo dijo?">
-          <p>Una cita del Congreso. Adivina el grupo y después consulta el contexto.</p>
-        </Intro>
-        {rounds ? <Quiz rounds={rounds} /> : <Empty>No hay un reto publicado para hoy.</Empty>}
-      </>
-    );
-  } else if (['sobre', 'metodo', 'glosario', 'como-ley'].includes(section)) {
-    const terms = [
-      ['Pleno', 'La reunión de todos los diputados. Debate, vota y controla al Gobierno.'],
-      [
-        'Comisión',
-        'Un grupo de diputados que trabaja sobre una materia y prepara decisiones del Pleno.',
-      ],
-      [
-        'Proposición de ley',
-        'Una iniciativa legislativa presentada por quienes tienen esa facultad, como los grupos parlamentarios.',
-      ],
-      ['Proyecto de ley', 'Una iniciativa legislativa que presenta el Gobierno.'],
-      [
-        'Real decreto-ley',
-        'Una norma del Gobierno para circunstancias de extraordinaria y urgente necesidad, sujeta a convalidación en el Congreso.',
-      ],
-      ['Abstención', 'El diputado participa en la votación sin votar a favor ni en contra.'],
-      ['No vota', 'La fuente no registra voto; no permite concluir por sí sola la causa.'],
-    ];
-    content = (
-      <>
-        <Intro title={route.title} />
-        {section === 'glosario' ? (
-          <dl className="cg-glossary">
-            {terms.map(([term, definition]) => (
-              <div key={term}>
-                <dt>{term}</dt>
-                <dd>{definition}</dd>
-              </div>
-            ))}
-          </dl>
-        ) : section === 'como-ley' ? (
-          <>
-            <ol className="cg-timeline">
-              {[
-                'Presentación y admisión a trámite',
-                'Debate y enmiendas en el Congreso',
-                'Aprobación y remisión al Senado',
-                'Decisión final del Congreso cuando corresponde',
-                'Sanción, promulgación y publicación en el BOE',
-              ].map((step) => (
-                <li key={step}>
-                  <h2>{step}</h2>
-                </li>
-              ))}
-            </ol>
-            <p>
-              El recorrido varía según el tipo de iniciativa. Cada ficha enlaza su expediente para
-              consultar el procedimiento completo.
-            </p>
-            <Source url="https://www.congreso.es/es/funciones">Funciones del Congreso</Source>
-          </>
-        ) : (
-          <>
-            <Section title="Datos públicos, con contexto">
-              <p>
-                Votaciones, Diarios de Sesiones, diputados, iniciativas, preguntas, agenda e
-                intereses proceden del Congreso. Los nombramientos y ceses proceden del BOE; la
-                geografía usa datos del INE. Cada ficha conserva enlaces a las fuentes.
-              </p>
-              <p>
-                Los resúmenes, tonos, temas y agrupaciones se generan con IA y pueden contener
-                errores. Las citas se contrastan con el texto extraído del Diario. La transcripción
-                también puede contener errores: el PDF oficial es la referencia.
-              </p>
-              <p>
-                El histórico importado conserva análisis de Escaño Abierto. Los nuevos análisis usan
-                Helmcode y guardan el modelo, la versión del prompt y el hash de entrada.
-              </p>
-            </Section>
-            <Section title="Puedes reutilizarlos">
-              <p>
-                La API es pública, tiene filtros y permite descargar los conjuntos originales. El
-                código del recolector se ha adaptado de Escaño Abierto, con licencia MIT y su
-                atribución.
-              </p>
-              <div className="cg-tabs">
-                <Link className="boton" href="/api/congreso">
-                  Consultar la API
-                </Link>
-                <Link className="boton-claro" href="/api/congreso/descarga">
-                  Descargar el histórico
-                </Link>
-                <Source url="https://github.com/jorgegarcelan/escano-abierto">
-                  Código de origen
-                </Source>
-              </div>
-            </Section>
-          </>
-        )}
-      </>
+      <>{rounds ? <Quiz rounds={rounds} /> : <Empty>No hay un reto publicado para hoy.</Empty>}</>
     );
   } else {
     const data = await getPeriod(periodo);
@@ -272,48 +225,33 @@ export default async function Page({ params, searchParams }: Props) {
     );
   }
   return (
-    <main id="main" tabIndex={-1}>
-      {section === '' && (
-        <section className="cg-hero">
-          <span className="t-etiqueta">Un proyecto de Reforma Digital</span>
-          <h1>Lo que pasa en el Congreso, contado para cualquiera.</h1>
-          <p>
-            Cada pleno resumido, cada votación con el voto de cada diputado y cada ley, desde que
-            entra hasta que se publica. Con datos oficiales, en lenguaje claro y con código abierto.
-          </p>
-          <a className="boton-claro" href="#lo-ultimo">
-            Lo último del Congreso ↓
-          </a>
-        </section>
+    <>
+      {['', 'dias', 'votaciones', 'diputado', 'grupos', 'oradores'].includes(section) && (
+        <form
+          className="cg-period"
+          action={`${congressBase}/${section}${detail ? `/${detail}` : ''}`}
+        >
+          <label htmlFor="congress-period">Periodo</label>
+          <select id="congress-period" className="campo" name="periodo" defaultValue={periodo}>
+            <option value="reciente">Últimos tres meses</option>
+            <option value="todo">Toda la legislatura</option>
+            {index.meses
+              .slice()
+              .reverse()
+              .map((m) => (
+                <option key={m.mes}>{m.mes}</option>
+              ))}
+          </select>
+          <button className="boton-claro" type="submit">
+            Aplicar
+          </button>
+        </form>
       )}
-      <div className="cg-body">
-        {['', 'dias', 'votaciones', 'diputado', 'grupos', 'oradores'].includes(section) && (
-          <form
-            className="cg-period"
-            action={`${congressBase}/${section}${detail ? `/${detail}` : ''}`}
-          >
-            <label htmlFor="congress-period">Periodo</label>
-            <select id="congress-period" className="campo" name="periodo" defaultValue={periodo}>
-              <option value="reciente">Últimos tres meses</option>
-              <option value="todo">Toda la legislatura</option>
-              {index.meses
-                .slice()
-                .reverse()
-                .map((m) => (
-                  <option key={m.mes}>{m.mes}</option>
-                ))}
-            </select>
-            <button className="boton-claro" type="submit">
-              Aplicar
-            </button>
-          </form>
-        )}
-        {content}
-        <p className="cg-provenance">
-          Snapshot generado el {date(index.meta.generado)}. Los distintos conjuntos pueden tener
-          fechas de actualización diferentes. <Link href={href('metodo')}>Método y fuentes</Link>.
-        </p>
-      </div>
-    </main>
+      {content}
+      <p className="cg-provenance">
+        Snapshot generado el {date(index.meta.generado)}. Los distintos conjuntos pueden tener
+        fechas de actualización diferentes. <Link href={href('metodo')}>Método y fuentes</Link>.
+      </p>
+    </>
   );
 }

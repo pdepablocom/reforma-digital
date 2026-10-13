@@ -233,9 +233,6 @@ export async function Explore({
   }
   return (
     <>
-      <Intro title="Explora la legislatura">
-        <p>Citas, propuestas y respuestas, con su contexto para comprobarlas.</p>
-      </Intro>
       <nav className="cg-tabs" aria-label="Explorar">
         {tabs.map(([id, name]) => (
           <Link href={`?vista=${id}`} key={id} aria-current={selected === id ? 'page' : undefined}>

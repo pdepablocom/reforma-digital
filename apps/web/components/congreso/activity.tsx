@@ -107,9 +107,6 @@ export async function Activity({
     const questions = z.array(z.object({ content: rawQuestionSchema })).parse(rows);
     return (
       <>
-        <Intro title="Preguntas al Gobierno">
-          <p>Lo que los diputados preguntan por escrito y las respuestas pendientes.</p>
-        </Intro>
         <Stats
           items={[
             [summary.total, 'Preguntas registradas'],
@@ -179,9 +176,6 @@ export async function Activity({
     );
     return (
       <>
-        <Intro title="Cómo avanza cada ley">
-          <p>Desde la presentación hasta su aprobación, con el expediente oficial a un clic.</p>
-        </Intro>
         <Filters action={href('leyes')} query={query} />
         <Laws laws={laws.slice((page - 1) * 24, page * 24)} legislature={index.meta.legislatura} />
         <Pagination page={page} total={laws.length} params={{ q: query }} />
@@ -204,7 +198,6 @@ export async function Activity({
     if (section === 'temas')
       return (
         <>
-          <Intro title="El Congreso, por temas" />
           <div className="cg-grid">
             {Object.entries(topics).map(([id, topic]) => (
               <Link href={href(`tema/${id}`)} className="cg-card" key={id}>
@@ -365,7 +358,6 @@ export async function Activity({
   if (section === 'votaciones')
     return (
       <>
-        <Intro title="Cada voto, a la vista" />
         <Filters action={href('votaciones')} query={query} period={period} />
         <Votes votes={votes.slice((page - 1) * 24, page * 24)} />
         <Pagination page={page} total={votes.length} params={{ q: query, periodo: period }} />
@@ -376,9 +368,6 @@ export async function Activity({
   );
   return (
     <>
-      <Intro title="Por día">
-        <p>Plenos y comisiones, con el debate y las votaciones de cada sesión.</p>
-      </Intro>
       <Filters action={href('dias')} query={query} period={period} />
       <Sessions sessions={sessions.slice((page - 1) * 24, page * 24)} />
       <Pagination page={page} total={sessions.length} params={{ q: query, periodo: period }} />

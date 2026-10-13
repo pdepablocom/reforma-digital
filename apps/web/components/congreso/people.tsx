@@ -79,11 +79,6 @@ export async function People({
     );
     return (
       <>
-        <Intro title="Quién ocupa cada cargo">
-          <p>
-            Nombramientos y ceses publicados en el BOE. Actualizado el {date(organs.actualizado)}.
-          </p>
-        </Intro>
         <Stats
           items={[
             [organs.cifras.cargos_ocupados, 'Cargos ocupados'],
@@ -201,7 +196,6 @@ export async function People({
     const data = await getPeriod(period);
     return (
       <>
-        <Intro title="Los grupos parlamentarios" />
         <Hemicycle index={index} />
         <div className="cg-grid">
           {Object.entries(index.grupos)
@@ -255,9 +249,6 @@ export async function People({
     );
     return (
       <>
-        <Intro title="Por orador">
-          <p>Qué dijo cada persona, en qué contexto y con qué tono según el análisis.</p>
-        </Intro>
         <Filters
           action={href('oradores')}
           query={query}
@@ -288,15 +279,17 @@ export async function People({
   );
   return (
     <>
-      <Intro
-        title={
-          section === 'provincia'
-            ? `Tus diputados${selectedProvince ? ` · ${selectedProvince}` : ''}`
-            : 'Quién te representa'
-        }
-      >
-        <p>Miembros actuales e históricos de la legislatura {index.meta.legislatura}.</p>
-      </Intro>
+      {detail && (
+        <Intro
+          title={
+            section === 'provincia'
+              ? `Tus diputados${selectedProvince ? ` · ${selectedProvince}` : ''}`
+              : 'Quién te representa'
+          }
+        >
+          <p>Miembros actuales e históricos de la legislatura {index.meta.legislatura}.</p>
+        </Intro>
+      )}
       <Filters
         action={href(section)}
         query={query}
