@@ -45,6 +45,77 @@
 .cg-nav li a:hover {
   background: var(--superficie);
 }
+/* Desde 1100 px, las vistas van en una columna a la izquierda, todas a la vista y sin desplegables; el
+   contenido ocupa el resto. Por debajo se queda la barra con desplegables (DESIGN.md §8.7). */
+.cg {
+  --cg-ancho: calc(
+    var(--ancho) + 264px
+  ); /* la columna (232) y su hueco (32), además de la retícula */
+}
+.cg-lateral {
+  display: none;
+}
+.cg .in-nav [aria-current='page'] {
+  background: var(--superficie);
+}
+@media (min-width: 1100px) {
+  .cg-nav {
+    display: none;
+  }
+  /* La cabecera de Sol se alinea con la columna */
+  .cg .in-nav {
+    --ancho: var(--cg-ancho);
+  }
+  .cg-marco {
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    column-gap: var(--e-32);
+    align-items: start;
+    max-width: var(--cg-ancho);
+    margin: auto;
+    padding-inline: var(--margen);
+  }
+  .cg-lateral {
+    display: block;
+    position: sticky;
+    top: var(--e-16);
+    max-height: calc(100dvh - var(--e-32));
+    overflow-y: auto;
+  }
+  .cg-lateral ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cg-lateral h2 {
+    margin: var(--e-16) 0 var(--e-4);
+    padding-inline: var(--e-12);
+    font-size: 11px;
+    color: var(--tinta-3);
+  }
+  .cg-lateral a {
+    display: flex;
+    align-items: center;
+    min-height: 36px;
+    padding-inline: var(--e-12);
+    border-radius: var(--r-12);
+    color: var(--tinta-2);
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .cg .cg-lateral a:hover,
+  .cg-lateral [aria-current='page'] {
+    background: var(--superficie);
+    color: var(--tinta);
+    text-decoration: none;
+  }
+  .cg-marco .cg-hero {
+    margin-inline: 0;
+  }
+  .cg-marco .cg-body {
+    padding-inline: 0;
+  }
+}
 /* Portada: la silueta del hero de Sol, en blanco. El atardecer sube tramado en celdas desde el borde de
    abajo y el relleno inferior le reserva su alto: el texto nunca queda encima (DESIGN.md §8.7). */
 .cg-hero {
@@ -159,13 +230,18 @@
   image-rendering: pixelated;
   pointer-events: none;
 }
-@media (max-width: 1160px) {
+/* Los cortes van con el ancho de la columna de contenido, no con el de la ventana: con la columna de vistas
+   al lado, la cabecera es más estrecha que la pantalla. */
+.cg-body {
+  container-type: inline-size;
+}
+@container (max-width: 1090px) {
   .cg-intro:has(> h1) {
     --celda: 3px;
   }
 }
 /* Donde el texto ya no cabe al lado: ocupa todo el ancho y el sol baja, centrado, a un hueco reservado. */
-@media (max-width: 900px) {
+@container (max-width: 820px) {
   .cg-intro:has(> h1) {
     min-height: 0;
     padding-bottom: calc(44 * var(--celda) + var(--e-16));

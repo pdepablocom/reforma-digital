@@ -9,6 +9,7 @@ export function Header({ current, action }: { current?: string; action?: ReactNo
   const links = [
     { href: '/#iniciativa', text: 'La iniciativa', current: false },
     { href: '/#proyectos', text: 'Proyectos', current: false },
+    { href: '/congreso', text: 'El Congreso', current: current === '/congreso' },
     { href: '/equipo', text: 'Equipo', current: current === '/equipo' },
   ];
 
