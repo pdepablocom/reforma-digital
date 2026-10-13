@@ -19,7 +19,7 @@ export function CongressShell({ children }: { children: ReactNode }) {
             <ul>
               {section.pages.map(([title, path]) => (
                 <li key={path}>
-                  <Link href={`${congressBase}/${path}`}>{title}</Link>
+                  <Link href={`${congressBase}${path ? `/${path}` : ''}`}>{title}</Link>
                 </li>
               ))}
             </ul>

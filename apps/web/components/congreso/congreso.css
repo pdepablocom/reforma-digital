@@ -547,7 +547,7 @@
   gap: var(--e-48);
   margin: var(--e-32) 0;
 }
-.cg-geo-hero svg {
+.cg-geo-hero > svg {
   width: 100%;
   max-height: 420px;
 }

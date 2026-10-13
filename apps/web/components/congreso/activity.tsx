@@ -187,8 +187,8 @@ export async function Activity({
         <Pagination page={page} total={laws.length} params={{ q: query }} />
         <Section title="Leyes publicadas">
           <div className="cg-grid">
-            {data.aprobadas.map((law) => (
-              <article className="cg-card" key={law.pdf}>
+            {data.aprobadas.map((law, i) => (
+              <article className="cg-card" key={`${law.pdf}-${i}`}>
                 <h3>{law.titulo}</h3>
                 <p>{date(law.fecha)}</p>
                 <Source url={law.pdf}>Publicación oficial</Source>

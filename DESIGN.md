@@ -179,7 +179,7 @@ Si un panel ofrece un control sincronizado con uno oficial (el desplegable de pr
 
 ## 8. Web pública: sistema Sol
 
-Sol es el diseño definitivo de `apps/web`, no una variante de portada. Las rutas públicas son `/` (iniciativa y proyectos), `/chat` (buscador), `/equipo`, `/sources`, `/how-it-works` y `/privacy`. Las evaluaciones conservan su acceso interno en `/admin/evals`. Las páginas de error usan el mismo sistema. No se mantienen catálogos de variantes ni demos de chat con respuestas simuladas.
+Sol es el diseño definitivo de `apps/web`, no una variante de portada. Las rutas públicas son `/` (iniciativa y proyectos), `/chat` (buscador), `/congreso` (actividad parlamentaria y datos electorales), `/equipo`, `/sources`, `/how-it-works` y `/privacy`. Las evaluaciones conservan su acceso interno en `/admin/evals`. Las páginas de error usan el mismo sistema. No se mantienen catálogos de variantes ni demos de chat con respuestas simuladas.
 
 | Fuente de verdad                                                                | Archivo                                                                                                                                                                                                               |
 | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -243,7 +243,7 @@ Antes de añadir otro valor o componente, consulta `GUIA.md` y reutiliza los tok
 
 ### 8.7 El Congreso
 
-El Congreso (`/new-escanoabierto/web`, en vista previa) es una sección de Reforma Digital y usa Sol sin tokens propios. Sus estilos están en [`congreso.css`](apps/web/components/congreso/congreso.css). Aquí solo se recoge lo que decide por su cuenta.
+El Congreso (`/congreso`) es una sección pública de Reforma Digital y usa Sol sin tokens propios. Conserva el diseño de Pablo de la PR #127. Sus estilos están en [`congreso.css`](apps/web/components/congreso/congreso.css). Aquí solo se recoge lo que decide por su cuenta.
 
 - La página es blanca de arriba abajo, también la portada. El rojo a caja completa (`--atardecer` como fondo de un hero) queda para la portada de Reforma Digital (`/`).
 - La portada conserva la silueta del hero de Sol (8 px de margen, radio 28, titular centrado de 36–72 px), en blanco y con un anillo de 1 px en `--linea`. La cabecera y la barra de la sección van encima, no dentro.

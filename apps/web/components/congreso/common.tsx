@@ -15,7 +15,7 @@ export const date = (value: string) =>
     timeZone: 'UTC',
   }).format(new Date(`${value}T12:00:00Z`));
 export const href = (path: string, month?: string) =>
-  `${congressBase}/${path}${month ? `?periodo=${month}` : ''}`;
+  `${congressBase}${path ? `/${path}` : ''}${month ? `?periodo=${month}` : ''}`;
 
 export function Intro({
   label = 'El Congreso',

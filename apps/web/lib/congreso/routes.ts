@@ -1,4 +1,4 @@
-export const congressBase = '/new-escanoabierto/web';
+export const congressBase = '/congreso';
 export const congressSections = [
   {
     title: 'Portada y pestañas',

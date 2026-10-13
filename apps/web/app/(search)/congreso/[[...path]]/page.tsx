@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { z } from 'zod';
-import { getIndex, getPeriod, getQuiz } from '../../../../../lib/congreso/data';
-import { congressBase, congressRoute } from '../../../../../lib/congreso/routes';
+import { getIndex, getPeriod, getQuiz } from '../../../../lib/congreso/data';
+import { congressBase, congressRoute } from '../../../../lib/congreso/routes';
+import { pageMetadata } from '../../../../lib/seo';
 import {
   Intro,
   Section,
@@ -15,12 +16,12 @@ import {
   Source,
   date,
   href,
-} from '../../../../../components/congreso/common';
-import { Activity } from '../../../../../components/congreso/activity';
-import { People } from '../../../../../components/congreso/people';
-import { Explore } from '../../../../../components/congreso/explore';
-import { Geography, Elections } from '../../../../../components/congreso/elections';
-import { Quiz } from '../../../../../components/congreso/quiz';
+} from '../../../../components/congreso/common';
+import { Activity } from '../../../../components/congreso/activity';
+import { People } from '../../../../components/congreso/people';
+import { Explore } from '../../../../components/congreso/explore';
+import { Geography, Elections } from '../../../../components/congreso/elections';
+import { Quiz } from '../../../../components/congreso/quiz';
 
 type Props = {
   params: Promise<{ path?: string[] }>;
@@ -28,11 +29,16 @@ type Props = {
 };
 export const dynamic = 'force-dynamic';
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const route = congressRoute((await params).path);
-  return {
-    title: `${route?.title || 'El Congreso'} · Reforma Digital`,
-    robots: { index: false, follow: false },
-  };
+  const { path = [] } = await params;
+  const route = congressRoute(path);
+  if (!route) notFound();
+  return pageMetadata({
+    title: `${route.title} · El Congreso · Reforma Digital`,
+    description:
+      'Qué se dijo, cómo se votó y quién te representa. Actividad parlamentaria con datos oficiales, fuentes y análisis identificados como IA.',
+    path: href(path.map(encodeURIComponent).join('/')),
+    og: 'portada',
+  });
 }
 const querySchema = z.object({
   q: z.string().max(200).default(''),

@@ -69,8 +69,7 @@ Los objetos originales se conservan. Se conservan las siete publicaciones más r
 
 ## API y web
 
-- `/new-escanoabierto`: índice de revisión, sin indexación.
-- `/new-escanoabierto/web`: web nativa con los datos propios.
+- `/congreso`: web pública con los datos propios, el diseño de Pablo y las vistas de actividad, diputados, elecciones y geografía.
 - `/api/congreso`: catálogo y publicación actual.
 - `/api/congreso/datasets/<ruta.json>`: contrato original, ETag y `X-Congreso-Publication`.
 - `/api/congreso/votaciones`, `/preguntas`, `/sesiones`: `pagina`, `limite` (1–100), `q`, `legislatura`, `desde`, `hasta`; preguntas admite `estado`.
