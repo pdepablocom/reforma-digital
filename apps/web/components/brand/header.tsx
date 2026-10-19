@@ -20,13 +20,12 @@ const pieza = cn(
 const participar = cn(pieza, 'border border-border bg-background pr-2.5 hover:bg-background');
 
 // Al bajar los primeros 40 px, --pliegue va de 0 a 1 (animación ligada al scroll, sin JS): el
-// texto «Reforma Digital» se pliega y la R, sin encoger, queda centrada en un icono blanco de
-// 52 × 52 px (27 de la R + 2 × 11,5 de relleno + 2 de borde) con el borde de «Participar»,
-// alineado con la columna y con esquinas continuas, como un icono de app. La esquina continua
-// necesita más radio (24 px) para verse igual de redonda; sin ella se queda en 14 px.
+// texto «Reforma Digital» se pliega y la R, sin encoger (36 px), queda centrada en un icono blanco
+// de 64 × 64 px con las proporciones del icono de la app (la R ocupa algo más de la mitad del alto)
+// y el borde de «Participar», alineado con la columna. -my-2 evita que la cabecera crezca.
 // Sin `animation-timeline`, la animación dura 0 s y se queda en 1: la R en su pastilla.
 const logo =
-  'mr-auto -ml-[12.5px] flex h-13 items-center rounded-[14px] supports-[corner-shape:squircle]:rounded-[24px] supports-[corner-shape:squircle]:[corner-shape:squircle] border border-solid px-[11.5px] outline-none bg-[color-mix(in_srgb,var(--background)_calc(100%*var(--pliegue)),transparent)] [border-color:color-mix(in_srgb,var(--border)_calc(100%*var(--pliegue)),transparent)] [translate:calc(12.5px*var(--pliegue))_0] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-foreground [&_.marca]:[gap:calc(0.5em*(1-var(--pliegue)))] [&_.marca-texto]:overflow-hidden [&_.marca-texto]:[max-width:calc(6em*(1-var(--pliegue)))] [&_.marca-texto]:[opacity:calc(1-var(--pliegue))]';
+  'mr-auto -my-2 -ml-[18.5px] flex h-16 items-center rounded-[16px] border border-solid px-[17.5px] outline-none bg-[color-mix(in_srgb,var(--background)_calc(100%*var(--pliegue)),transparent)] [border-color:color-mix(in_srgb,var(--border)_calc(100%*var(--pliegue)),transparent)] [translate:calc(18.5px*var(--pliegue))_0] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-foreground [&_.marca]:[gap:calc(0.5em*(1-var(--pliegue)))] [&_.marca-texto]:overflow-hidden [&_.marca-texto]:[max-width:calc(6em*(1-var(--pliegue)))] [&_.marca-texto]:[opacity:calc(1-var(--pliegue))]';
 
 export function Header({ current }: { current?: string }) {
   const links = [
