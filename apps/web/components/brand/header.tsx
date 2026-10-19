@@ -20,11 +20,11 @@ const pieza = cn(
 const participar = cn(pieza, 'border border-border bg-background pr-2.5 hover:bg-background');
 
 // Al bajar los primeros 40 px, --pliegue va de 0 a 1 (animación ligada al scroll, sin JS): el
-// texto «Reforma Digital» se pliega y la R encoge hasta 34 px dentro de una pastilla blanca opaca
-// con el borde de «Participar» (compensado para que siga midiendo 1 px al encoger).
+// texto «Reforma Digital» se pliega y la R, sin encoger, queda en una pastilla blanca opaca de
+// 48 px con el borde de «Participar», alineada con la columna.
 // Sin `animation-timeline`, la animación dura 0 s y se queda en 1: la R en su pastilla.
 const logo =
-  'mr-auto -ml-2 flex h-[45px] origin-left items-center rounded-xl border-solid px-2 outline-none bg-[color-mix(in_srgb,var(--background)_calc(100%*var(--pliegue)),transparent)] [border-color:color-mix(in_srgb,var(--border)_calc(100%*var(--pliegue)),transparent)] [border-width:calc(1px/(1-0.25*var(--pliegue)))] [scale:calc(1-0.25*var(--pliegue))] [translate:calc(8px*var(--pliegue))_0] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-foreground [&_.marca]:[gap:calc(0.5em*(1-var(--pliegue)))] [&_.marca-texto]:overflow-hidden [&_.marca-texto]:[max-width:calc(6em*(1-var(--pliegue)))] [&_.marca-texto]:[opacity:calc(1-var(--pliegue))]';
+  'mr-auto -ml-2.5 flex h-12 items-center rounded-xl border border-solid px-2.5 outline-none bg-[color-mix(in_srgb,var(--background)_calc(100%*var(--pliegue)),transparent)] [border-color:color-mix(in_srgb,var(--border)_calc(100%*var(--pliegue)),transparent)] [translate:calc(10px*var(--pliegue))_0] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-foreground [&_.marca]:[gap:calc(0.5em*(1-var(--pliegue)))] [&_.marca-texto]:overflow-hidden [&_.marca-texto]:[max-width:calc(6em*(1-var(--pliegue)))] [&_.marca-texto]:[opacity:calc(1-var(--pliegue))]';
 
 export function Header({ current }: { current?: string }) {
   const links = [
