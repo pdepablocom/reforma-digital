@@ -26,18 +26,34 @@ function ContextMenuContent({ className, ...props }: ContextMenuPrimitive.Popup.
   );
 }
 
-function ContextMenuLinkItem({ className, ...props }: ContextMenuPrimitive.LinkItem.Props) {
+const item =
+  "flex min-h-8 cursor-default items-center gap-2 rounded-md px-2 text-sm text-popover-foreground no-underline outline-hidden select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+
+function ContextMenuItem({ className, ...props }: ContextMenuPrimitive.Item.Props) {
   return (
-    <ContextMenuPrimitive.LinkItem
+    <ContextMenuPrimitive.Item
       data-slot="context-menu-item"
-      closeOnClick
-      className={cn(
-        "flex min-h-8 cursor-default items-center gap-2 rounded-md px-2 text-sm text-popover-foreground no-underline outline-hidden select-none data-highlighted:bg-accent data-highlighted:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className,
-      )}
+      className={cn(item, className)}
       {...props}
     />
   );
 }
 
-export { ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuLinkItem };
+function ContextMenuLinkItem({ className, ...props }: ContextMenuPrimitive.LinkItem.Props) {
+  return (
+    <ContextMenuPrimitive.LinkItem
+      data-slot="context-menu-item"
+      closeOnClick
+      className={cn(item, className)}
+      {...props}
+    />
+  );
+}
+
+export {
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLinkItem,
+};

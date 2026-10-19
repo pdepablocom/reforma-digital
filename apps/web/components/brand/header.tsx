@@ -22,12 +22,12 @@ const participar = cn(pieza, 'border border-border bg-background pr-2.5 hover:bg
 
 // Al bajar los primeros 40 px, --pliegue va de 0 a 1 (animación ligada al scroll, sin JS): el
 // texto «Reforma Digital» se pliega y la R, sin encoger (36 px), queda centrada en un icono blanco
-// de 64 × 64 px con las proporciones del icono de la app y el borde de «Participar», alineado con
-// la columna. El fondo y el borde van en una capa aparte que solo cambia de opacidad, que funciona
-// en cualquier navegador. -my-2 evita que la cabecera crezca.
+// de 56 × 56 px con el borde de «Participar». El icono baja 11 px para que su borde superior
+// quede a la altura del de los botones del menú, y se alinea con la columna. El fondo y el borde
+// van en una capa que solo cambia de opacidad. -my-1 evita que la cabecera crezca.
 // Sin `animation-timeline`, la animación dura 0 s y se queda en 1: la R en su icono.
 const logo =
-  'relative isolate mr-auto -my-2 -ml-[18.5px] flex h-16 items-center rounded-[16px] px-[18.5px] outline-none [translate:calc(18.5px*var(--pliegue))_0] before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:border before:border-border before:bg-background before:[opacity:var(--pliegue)] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-foreground [&_.marca]:[gap:calc(0.5em*(1-var(--pliegue)))] [&_.marca-texto]:overflow-hidden [&_.marca-texto]:[max-width:calc(6em*(1-var(--pliegue)))] [&_.marca-texto]:[opacity:calc(1-var(--pliegue))]';
+  'relative isolate mr-auto -my-1 -ml-[14.5px] flex h-14 items-center rounded-[14px] px-[14.5px] outline-none [translate:calc(14.5px*var(--pliegue))_calc(11px*var(--pliegue))] before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:border before:border-border before:bg-background before:[opacity:var(--pliegue)] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-foreground [&_.marca]:[gap:calc(0.5em*(1-var(--pliegue)))] [&_.marca-texto]:overflow-hidden [&_.marca-texto]:[max-width:calc(6em*(1-var(--pliegue)))] [&_.marca-texto]:[opacity:calc(1-var(--pliegue))]';
 
 export function Header({ current }: { current?: string }) {
   const links = [
