@@ -1,26 +1,43 @@
 'use client';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuLinkItem,
+  ContextMenuTrigger,
+} from '@reforma-digital/design/ui/context-menu';
 import Link from 'next/link';
-import { useEffect, useState, type ReactNode } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 
-// El logotipo plegado es el icono de la app: a partir de los 40 px en que se pliega, lleva a
-// /escritorio en vez de a la portada.
+// Plegado, el logotipo es un icono: un clic vuelve arriba en vez de cambiar de página. Con el
+// botón derecho (o pulsación larga) se elige entre la portada y la app de escritorio.
 export function LogoLink({ className, children }: { className: string; children: ReactNode }) {
-  const [app, setApp] = useState(false);
-  useEffect(() => {
-    const update = () => setApp(window.scrollY >= 40);
-    update();
-    window.addEventListener('scroll', update, { passive: true });
-    return () => window.removeEventListener('scroll', update);
-  }, []);
+  function onClick(event: MouseEvent) {
+    const modified = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+    if (modified || window.scrollY < 40) return;
+    event.preventDefault();
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  }
   return (
-    <Link
-      href={app ? '/escritorio' : '/'}
-      aria-label={
-        app ? 'App de escritorio de Reforma Digital' : 'Reforma Digital, portada de la iniciativa'
-      }
-      className={className}
-    >
-      {children}
-    </Link>
+    <ContextMenu>
+      <ContextMenuTrigger
+        render={
+          <Link
+            href="/"
+            aria-label="Reforma Digital, portada de la iniciativa"
+            className={className}
+            onClick={onClick}
+          />
+        }
+      >
+        {children}
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuLinkItem render={<Link href="/" />}>Ir a la portada</ContextMenuLinkItem>
+        <ContextMenuLinkItem render={<Link href="/escritorio" />}>
+          Abrir la app de escritorio
+        </ContextMenuLinkItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }
