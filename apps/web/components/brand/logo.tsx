@@ -1,3 +1,5 @@
+import { Logotipo } from '@reforma-digital/design/ui/logotipo';
+
 const cuerpo = 'M48 0H96V48H48V96H96V144H48V192H0V48H48ZM96 48H144V96H96ZM96 144H144V192H96Z';
 const doblez = 'M0 48L48 0V48Z';
 
@@ -14,21 +16,14 @@ export function LogoMark({ size = 28 }: { size?: number }) {
   );
 }
 
-// Logo completo: la R y «Reforma / Digital» en dos líneas, en --font-logo. `size` es el alto
-// de la R; el texto ocupa ese mismo alto. Toma el color del texto.
+// Logo completo: la R y «Reforma / Digital» en dos líneas, separados por un módulo (1/4 de la R).
+// `size` es el alto de la R. El tamaño de letra solo fija las medidas en em de `.marca`.
 export function Logo({ size = 28 }: { size?: number }) {
   return (
-    <span
-      className={
-        'marca inline-flex items-center [gap:0.5em] [font-family:var(--font-brand-logo)] font-bold [line-height:0.92] [letter-spacing:-0.01em]'
-      }
-      style={{ fontSize: Math.round(size * 0.5) }}
-    >
+    <span className={'marca inline-flex items-center [gap:0.5em]'} style={{ fontSize: size / 2 }}>
       <LogoMark size={size} />
-      <span className={'marca-texto block'}>
-        Reforma
-        <br />
-        Digital
+      <span className={'marca-texto flex'}>
+        <Logotipo size={size} />
       </span>
     </span>
   );
