@@ -4,6 +4,7 @@ import { buttonVariants } from '@reforma-digital/design/ui/button';
 import Link from 'next/link';
 import { Icon } from './icon';
 import { Logo } from './logo';
+import { LogoLink } from './logo-link';
 import { MobileMenu } from './mobile-menu';
 
 // Pastillas de cristal sin barra detrás. Sin borde, el canto lo marca solo el tono y es igual en
@@ -21,11 +22,12 @@ const participar = cn(pieza, 'border border-border bg-background pr-2.5 hover:bg
 
 // Al bajar los primeros 40 px, --pliegue va de 0 a 1 (animación ligada al scroll, sin JS): el
 // texto «Reforma Digital» se pliega y la R, sin encoger (36 px), queda centrada en un icono blanco
-// de 64 × 64 px con las proporciones del icono de la app (la R ocupa algo más de la mitad del alto)
-// y el borde de «Participar», alineado con la columna. -my-2 evita que la cabecera crezca.
-// Sin `animation-timeline`, la animación dura 0 s y se queda en 1: la R en su pastilla.
+// de 64 × 64 px con las proporciones del icono de la app y el borde de «Participar», alineado con
+// la columna. El fondo y el borde van en una capa aparte que solo cambia de opacidad, que funciona
+// en cualquier navegador. -my-2 evita que la cabecera crezca.
+// Sin `animation-timeline`, la animación dura 0 s y se queda en 1: la R en su icono.
 const logo =
-  'mr-auto -my-2 -ml-[18.5px] flex h-16 items-center rounded-[16px] border border-solid px-[17.5px] outline-none bg-[color-mix(in_srgb,var(--background)_calc(100%*var(--pliegue)),transparent)] [border-color:color-mix(in_srgb,var(--border)_calc(100%*var(--pliegue)),transparent)] [translate:calc(18.5px*var(--pliegue))_0] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-foreground [&_.marca]:[gap:calc(0.5em*(1-var(--pliegue)))] [&_.marca-texto]:overflow-hidden [&_.marca-texto]:[max-width:calc(6em*(1-var(--pliegue)))] [&_.marca-texto]:[opacity:calc(1-var(--pliegue))]';
+  'relative isolate mr-auto -my-2 -ml-[18.5px] flex h-16 items-center rounded-[16px] px-[18.5px] outline-none [translate:calc(18.5px*var(--pliegue))_0] before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:border before:border-border before:bg-background before:[opacity:var(--pliegue)] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-foreground [&_.marca]:[gap:calc(0.5em*(1-var(--pliegue)))] [&_.marca-texto]:overflow-hidden [&_.marca-texto]:[max-width:calc(6em*(1-var(--pliegue)))] [&_.marca-texto]:[opacity:calc(1-var(--pliegue))]';
 
 export function Header({ current }: { current?: string }) {
   const links = [
@@ -38,9 +40,9 @@ export function Header({ current }: { current?: string }) {
 
   return (
     <header className="in-nav pointer-events-none sticky top-0 z-40 flex items-center gap-4 min-h-20 [padding:16px_max(var(--page-gutter),_calc((100%_-_var(--container-content))_/_2_+_var(--page-gutter)))] [&_>_*]:pointer-events-auto [&_nav]:flex [&_nav]:items-center [&_nav]:gap-1 [@media(max-width:_800px)]:[&_nav]:hidden [animation-name:cabecera-pliegue] [animation-fill-mode:both] [animation-timing-function:linear] [animation-timeline:scroll()] [animation-range:0_40px] motion-reduce:[animation-timing-function:steps(1,end)]">
-      <Link href="/" aria-label="Reforma Digital, portada de la iniciativa" className={logo}>
+      <LogoLink className={logo}>
         <Logo size={36} />
-      </Link>
+      </LogoLink>
       <nav aria-label="Navegación principal">
         {links.map((link) => (
           <Link
