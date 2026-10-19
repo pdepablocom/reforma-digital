@@ -6,7 +6,26 @@ import { Icon } from './icon';
 import { Logo } from './logo';
 import { MobileMenu } from './mobile-menu';
 
-export function Header({ current, className }: { current?: string; className?: string }) {
+// Pastillas de cristal sin barra detrás. Sin borde, el canto lo marca solo el tono y es igual en
+// todas; el hover oscurece con una sombra interior (que sí se anima) y la zona de clic
+// crece hasta 40 px sin cambiar la pieza.
+const pieza = cn(
+  buttonVariants({ variant: 'secondary' }),
+  'relative h-8.5 border-0 px-3 bg-secondary/60 backdrop-blur-xl backdrop-saturate-150 hover:bg-secondary/60 hover:backdrop-blur-xl [@media(prefers-reduced-transparency:reduce)]:bg-secondary',
+  'shadow-[inset_0_0_0_40px_rgb(0_0_0/0)] hover:shadow-[inset_0_0_0_40px_rgb(0_0_0/0.06)] aria-[current=page]:shadow-[inset_0_0_0_40px_rgb(0_0_0/0.06)]',
+  'transition-[box-shadow,scale] duration-150 ease-out active:scale-[0.96] active:not-aria-[haspopup]:translate-y-0 motion-reduce:transition-none',
+  'focus-visible:ring-0 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-foreground',
+  'before:absolute before:inset-x-0 before:-inset-y-[3px]',
+);
+const participar = cn(pieza, 'border border-border bg-background pr-2.5 hover:bg-background');
+
+// Al bajar los primeros 40 px, --pliegue va de 0 a 1 (animación ligada al scroll, sin JS): el
+// texto «Reforma Digital» se pliega y la R encoge hasta 34 px dentro de una pastilla de cristal.
+// Sin `animation-timeline`, la animación dura 0 s y se queda en 1: la R en su pastilla.
+const logo =
+  'mr-auto -ml-2 flex h-[45px] origin-left items-center rounded-xl px-2 outline-none backdrop-blur-xl backdrop-saturate-150 bg-[color-mix(in_srgb,var(--background)_calc(85%*var(--pliegue)),transparent)] [scale:calc(1-0.25*var(--pliegue))] [translate:calc(8px*var(--pliegue))_0] focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-offset-2 focus-visible:outline-foreground [&_.marca]:[gap:calc(0.5em*(1-var(--pliegue)))] [&_.marca-texto]:overflow-hidden [&_.marca-texto]:[max-width:calc(6em*(1-var(--pliegue)))] [&_.marca-texto]:[opacity:calc(1-var(--pliegue))]';
+
+export function Header({ current }: { current?: string }) {
   const links = [
     { href: '/escritorio', text: 'App', current: current === '/escritorio' },
     { href: '/congreso', text: 'El Congreso', current: current === '/congreso' },
@@ -16,13 +35,8 @@ export function Header({ current, className }: { current?: string; className?: s
   ];
 
   return (
-    <header
-      className={cn(
-        'in-nav flex items-center gap-4 min-h-20 [padding:16px_max(var(--page-gutter),_calc((100%_-_var(--container-content))_/_2_+_var(--page-gutter)))] [&_>_a]:flex [&_>_a]:items-center [&_>_a]:[margin-right:auto] [&_nav]:flex [&_nav]:items-center [&_nav]:gap-1 [&_.in-menu-boton]:hidden [@media(max-width:_800px)]:[&_nav]:hidden [@media(max-width:_800px)]:[&_.in-menu-boton]:inline-flex [view-transition-name:sol-cabecera]',
-        className,
-      )}
-    >
-      <Link href="/" aria-label="Reforma Digital, portada de la iniciativa">
+    <header className="in-nav pointer-events-none sticky top-0 z-40 flex items-center gap-4 min-h-20 [padding:16px_max(var(--page-gutter),_calc((100%_-_var(--container-content))_/_2_+_var(--page-gutter)))] [&_>_*]:pointer-events-auto [&_nav]:flex [&_nav]:items-center [&_nav]:gap-1 [@media(max-width:_800px)]:[&_nav]:hidden [animation-name:cabecera-pliegue] [animation-fill-mode:both] [animation-timing-function:linear] [animation-timeline:scroll()] [animation-range:0_40px] motion-reduce:[animation-timing-function:steps(1,end)]">
+      <Link href="/" aria-label="Reforma Digital, portada de la iniciativa" className={logo}>
         <Logo size={36} />
       </Link>
       <nav aria-label="Navegación principal">
@@ -33,17 +47,12 @@ export function Header({ current, className }: { current?: string; className?: s
             aria-current={link.current ? 'page' : undefined}
             data-slot="button"
             data-variant="secondary"
-            className={cn(buttonVariants({ variant: 'secondary' }))}
+            className={pieza}
           >
             {link.text}
           </Link>
         ))}
-        <Link
-          href="/#participar"
-          data-slot="button"
-          data-variant="outline"
-          className={cn(buttonVariants({ variant: 'outline', className: 'text-foreground' }))}
-        >
+        <Link href="/#participar" data-slot="button" data-variant="outline" className={participar}>
           Participar <Icon name="derecha" size={16} />
         </Link>
       </nav>
