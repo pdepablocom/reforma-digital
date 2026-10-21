@@ -19,8 +19,5 @@ artifacts/runs/
 artifacts/feedback/
 artifacts/crawl/
 
-# Cassette es de pago y su licencia prohíbe publicarla (DESIGN.md §8.1).
-apps/web/components/brand/fuentes/
-
 # App de escritorio (apps/desktop): compilación y paquetes.
 apps/desktop/out/

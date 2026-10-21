@@ -30,7 +30,7 @@ export function Footer() {
         <h2
           id="pie-titulo"
           className={
-            'pie-titulo m-0 [max-width:20ch] [font-size:clamp(32px,_4vw,_56px)] [line-height:1] [letter-spacing:-0.01em]'
+            'pie-titulo m-0 [max-width:20ch] [font-size:clamp(32px,_4vw,_56px)] [line-height:1] [letter-spacing:-0.035em]'
           }
         >
           Lo público es de todos. Su web, también.
