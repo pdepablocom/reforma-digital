@@ -3,10 +3,10 @@ import { Geist, Geist_Mono, Host_Grotesk } from 'next/font/google';
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist' });
 // Sin preload: solo la usan etiquetas y datos pequeños, y no todas las páginas los muestran.
 const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono', preload: false });
-// Solo Bold: los titulares no usan otro grosor, aunque pidan `font-normal`.
+// Solo Medium: los titulares no usan otro grosor, aunque pidan `font-normal`.
 const hostGrotesk = Host_Grotesk({
   subsets: ['latin'],
-  weight: '700',
+  weight: '500',
   variable: '--font-host-grotesk',
 });
 
